@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samgames | سرور رول‌پلی ایران</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Tahoma', 'Vazir', sans-serif;
+            background: #0a0e17;
+            color: #e8edf5;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-bottom: 1px solid #1e2740;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 36px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #f5b042, #fad974);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logo span {
+            font-size: 14px;
+            -webkit-text-fill-color: #8892b0;
+            background: none;
+        }
+        .user-badge {
+            background: #1a2340;
+            padding: 8px 22px;
+            border-radius: 50px;
+            font-size: 14px;
+            border: 1px solid #2f3b60;
+        }
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(145deg, #111a2e, #0d1422);
+            border-radius: 30px;
+            border: 1px solid rgba(245, 176, 66, 0.15);
+            margin-bottom: 35px;
+        }
+        .hero h1 {
+            font-size: 42px;
+            background: linear-gradient(135deg, #f5b042, #fad974);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            color: #8892b0;
+            font-size: 18px;
+        }
+        .hero .ip {
+            display: inline-block;
+            background: #0a101f;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-family: monospace;
+            font-size: 20px;
+            color: #f5b042;
+            border: 1px solid #f5b04244;
+            margin-top: 15px;
+            direction: ltr;
+        }
+        .section-title {
+            font-size: 24px;
+            margin: 30px 0 20px;
+            color: #f5b042;
+            border-right: 4px solid #f5b042;
+            padding-right: 15px;
+        }
+        .server-card {
+            background: rgba(18, 25, 40, 0.9);
+            border-radius: 20px;
+            padding: 22px 28px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 215, 100, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            transition: 0.3s;
+        }
+        .server-card:hover {
+            border-color: #f5b042;
+            transform: translateX(6px);
+        }
+        .server-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .server-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #f5b042;
+        }
+        .server-ip {
+            font-size: 15px;
+            color: #a0aac8;
+            direction: ltr;
+            font-family: monospace;
+            background: #111a2e;
+            padding: 4px 14px;
+            border-radius: 8px;
+            display: inline-block;
+            border: 1px solid #1f2a48;
+        }
+        .server-modes {
+            font-size: 14px;
+            color: #c8d0e8;
+        }
+        .server-modes span {
+            background: #1a2340;
+            padding: 2px 12px;
+            border-radius: 50px;
+            margin: 0 3px;
+            font-size: 12px;
+            display: inline-block;
+            margin-top: 4px;
+        }
+        .server-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .status-online {
+            color: #4ade80;
+        }
+        .status-offline {
+            color: #f87171;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot-online {
+            background: #4ade80;
+        }
+        .dot-offline {
+            background: #f87171;
+        }
+        .footer {
+            text-align: center;
+            color: #5a6488;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #1e2740;
+            font-size: 14px;
+        }
+        @media (max-width: 700px) {
+            .hero h1 { font-size: 28px; }
+            .server-card { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="logo">⚡ Samgames <span>| رول‌پلی ایران</span></div>
+        <div class="user-badge">👤 <span id="displayUser">مهمان</span></div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>🎭 سرور رول‌پلی Samgames</h1>
+        <p>بهترین تجربه نقش‌آفرینی در ماینکرفت ایران</p>
+        <div class="ip">play.samgames.net</div>
+        <p style="margin-top: 12px; font-size: 14px; color: #5a6488;">نسخه ۱.۲۰.۴ - ۱.۲۱ | ۲۴/۷ فعال</p>
+    </div>
+
+    <!-- SERVER LIST -->
+    <h2 class="section-title">🌍 سرورهای رول‌پلی</h2>
+
+    <div class="server-card">
+        <div class="server-info">
+            <div class="server-name
