@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixelMC | سرور ماینکرافت</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+  body { background: linear-gradient(135deg, #0a0a1a, #1e3a8a, #0f172a); color: #fff; min-height: 100vh; }
+
+  header {
+    background: rgba(0,0,0,0.4); backdrop-filter: blur(10px);
+    padding: 12px 30px; display: flex; justify-content: space-between;
+    align-items: center; position: sticky; top: 0; z-index: 100;
+    border-bottom: 2px solid #3b82f6; flex-wrap: wrap; gap: 10px;
+  }
+  .logo-img { height: 50px; cursor: pointer; border-radius: 8px; }
+  nav { display: flex; gap: 20px; flex-wrap: wrap; }
+  nav a { color: #ddd; text-decoration: none; font-size: 15px; cursor: pointer; }
+  nav a:hover { color: #60a5fa; }
+
+  .hero { text-align: center; padding: 60px 20px 30px; }
+  .hero h1 { font-size: 48px; margin-bottom: 15px; background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { font-size: 17px; color: #bbb; max-width: 600px; margin: 0 auto; line-height: 1.7; }
+
+  .logo-showcase { display: flex; justify-content: center; gap: 25px; padding: 25px 20px 40px; flex-wrap: wrap; }
+  .logo-box { background: rgba(255,255,255,0.05); border: 2px solid rgba(59, 130, 246, 0.3); border-radius: 18px; padding: 18px; transition: 0.4s; }
+  .logo-box:hover { transform: translateY(-8px); border-color: #3b82f6; }
+  .logo-box img { max-width: 200px; border-radius: 12px; display: block; }
+  .logo-box p { text-align: center; color: #60a5fa; margin-top: 10px; font-size: 13px; font-weight: bold; }
+
+  .servers { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; padding: 20px; }
+  .server-card { background: rgba(255,255,255,0.05); border: 2px solid rgba(59, 130, 246, 0.3); border-radius: 18px; padding: 25px; width: 300px; text-align: center; transition: 0.4s; }
+  .server-card:hover { transform: translateY(-10px); border-color: #3b82f6; }
+  .server-icon { font-size: 50px; margin-bottom: 12px; }
+  .server-card h2 { font-size: 24px; margin-bottom: 8px; }
+  .server-type { display: inline-block; padding: 5px 14px; border-radius: 20px; font-size: 12px; margin-bottom: 12px; font-weight: bold; }
+  .type-survival { background: #16a34a; }
+  .type-rp { background: #dc2626; }
+  .ip-box { background: rgba(0,0,0,0.5); border-radius: 10px; padding: 10px; margin: 12px 0; font-family: monospace; font-size: 14px; color: #4ade80; direction: ltr; border: 1px solid rgba(74, 222, 128, 0.3); word-break: break-all; }
+  .copy-btn { background: linear-gradient(90deg, #3b82f6, #60a5fa); color: #fff; border: none; padding: 11px; border-radius: 25px; font-size: 14px; font-weight: bold; cursor: pointer; width: 100%; }
+  .copy-btn.copied { background: #16a34a; }
+
+  .buy-section { text-align: center; padding: 40px 20px; }
+  .buy-btn { display: inline-block; background: linear-gradient(90deg, #3b82f6, #60a5fa); color: #fff; text-decoration: none; padding: 17px 45px; border-radius: 50px; font-size: 18px; font-weight: bold; box-shadow: 0 10px 30px rgba(59, 130, 246, 0.5); }
+
+  .section { padding: 50px 20px; max-width: 900px; margin: 0 auto; }
+  .section-title { text-align: center; font-size: 32px; margin-bottom: 10px; background: linear-gradient(90deg, #3b82f6, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .section-subtitle { text-align: center; color: #aaa; margin-bottom: 25px; font-size: 15px; }
+
+  .form-box { background: rgba(255,255,255,0.05); border: 2px solid rgba(59, 130, 246, 0.3); border-radius: 18px; padding: 25px; }
+  .form-group { margin-bottom: 15px; }
+  .form-group label { display: block; margin-bottom: 7px; color: #ddd; font-size: 14px; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 11px 14px; background: rgba(0,0,0,0.4); border: 2px solid rgba(59, 130, 246, 0.2); border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #3b82f6; }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+
+  .submit-btn { width: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); color: #fff; border: none; padding: 13px; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; }
+  .submit-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(59, 130, 246, 0.5); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .info-box { background: rgba(59, 130, 246, 0.1); border: 2px solid #3b82f6; border-radius: 15px; padding: 20px; margin-top: 20px; font-size: 14px; line-height: 1.7; color: #ccc; }
+  .info-box b { color: #60a5fa; }
+
+  footer { text-align: center; padding: 25px; background: rgba(0,0,0,0.5); color: #888; margin-top: 50px; border-top: 2px solid rgba(59, 130, 246, 0.3); font-size: 13px; }
+  footer a { color: #60a5fa; text-decoration: none; margin: 0 8px; }
+
+  @media (max-width: 700px) {
+    header { padding: 12px 15px; }
+    .hero h1 { font-size: 30px; }
+    .server-card { width: 100%; }
+    .logo-box img { max-width: 150px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="logo-dark.png" alt="PixelMC" class="logo-img" onclick="location.href='#'">
+  <nav>
+    <a onclick="scrollToSection('servers')">سرورها</a>
+    <a onclick="scrollToSection('buy')">خرید رنک</a>
+    <a onclick="scrollToSection('ticket')">تیکت</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>به PixelMC خوش آمدید</h1>
+  <p>بهترین تجربه سروایول و رول‌پلی ماینکرافت! به ما بپیوند و ماجراجویی خودت رو شروع کن.</p>
+</section>
+
+<section class="logo-showcase">
+  <div class="logo-box">
+    <img src="logo-dark.png" alt="PixelMC">
+    <p>⚔️ PixelMC — Survival</p>
+  </div>
+  <div class="logo-box">
+    <img src="logo-light.png" alt="SamGames">
+    <p>🎭 SamGames — RolePlay</p>
+  </div>
+</section>
+
+<section class="servers" id="servers">
+  <div class="server-card">
+    <div class="server-icon">⚔️</div>
+    <h2>PixelMC</h2>
+    <span class="server-type type-survival">Survival</span>
+    <div class="ip-box">pixelmc.jo3.org</div>
+    <button class="copy-btn" onclick="copyIP(this, 'pixelmc.jo3.org')">📋 کپی آیپی</button>
+  </div>
+  <div class="server-card">
+    <div class="server-icon">🎭</div>
+    <h2>PixelRP</h2>
+    <span class="server-type type-rp">RolePlay</span>
+    <div class="ip-box">PixelRp.aternos.me</div>
+    <button class="copy-btn" onclick="copyIP(this, 'PixelRp.aternos.me')">📋 کپی آیپی</button>
+  </div>
+</section>
+
+<section class="buy-section" id="buy">
+  <a href="https://daramet.com/pixelsmp" target="_blank" class="buy-btn">💎 خرید رنک از دارمت</a>
+</section>
+
+<section class="section" id="ticket">
+  <h2 class="section-title">🎫 سیستم تیکت</h2>
+  <p class="section-subtitle">مشکلی داری؟ تیکت بفرست تا بررسی کنیم.</p>
+
+  <form class="form-box" id="ticketForm" onsubmit="sendTicket(event)">
+    <div class="form-group">
+      <label>نام شما</label>
+      <input type="text" id="name" placeholder="مثلاً: AliPlayer" required>
+    </div>
+    <div class="form-group">
+      <label>آیدی دیسکورد یا ایمیل</label>
+      <input type="text" id="contact" placeholder="مثلاً: ali#1234 یا ali@mail.com" required>
+    </div>
+    <div class="form-group">
+      <label>دسته‌بندی</label>
+      <select id="category" required>
+        <option value="">انتخاب کن...</option>
+        <option>مشکل فنی سرور</option>
+        <option>خرید رنک</option>
+        <option>گزارش بازیکن</option>
+        <option>درخواست آنبن</option>
+        <option>سوال عمومی</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>موضوع</label>
+      <input type="text" id="subject" placeholder="خلاصه مشکل" required>
+    </div>
+    <div class="form-group">
+      <label>توضیحات کامل</label>
+      <textarea id="message" placeholder="مشکل رو کامل توضیح بده..." required></textarea>
+    </div>
+    <button type="submit" class="submit-btn" id="submitBtn">🚀 ارسال تیکت</button>
+  </form>
+
+  <div class="info-box" id="resultBox" style="display:none;">
+    <b>✅ تیکت ارسال شد!</b><br>
+    شماره تیکت: <span id="ticketNum" style="color:#facc15; font-family:monospace; font-size:17px;">---</span><br>
+    <br>
+    برای پیگیری <a id="ticketLink" href="#" target="_blank" style="color:#60a5fa;">اینجا کلیک کن</a>.
+  </div>
+</section>
+
+<footer>
+  <div>
+    <a href="https://daramet.com/pixelsmp" target="_blank">دارمت</a> |
+    <a onclick="scrollToSection('ticket')">پشتیبانی</a>
+  </div>
+  <p style="margin-top:8px;">© 2025 PixelMC — تمامی حقوق محفوظ است.</p>
+</footer>
+
+<script>
+/* ============================================================
+   ⚙️ این ۳ خط رو پر کن
+   ============================================================ */
+const GITHUB_USER = "samopopki";           // یوزرنیم گیت‌هابت
+const GITHUB_REPO = "pixelmc-tickets";      // اسم ریپو مخصوص تیکت‌ها
+const GITHUB_TOKEN = "";                    // توکن گیت‌هاب (پایین توضیح دادم)
+/* ============================================================ */
+
+window.scrollToSection = (id) => {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+};
+
+window.copyIP = (btn, ip) => {
+  navigator.clipboard.writeText(ip).then(() => {
+    const original = btn.textContent;
+    btn.textContent = '✅ کپی شد!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1500);
+  });
+};
+
+window.sendTicket = async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = '⏳ در حال ارسال...';
+
+  const ticket = {
+    name: document.getElementById('name').value.trim(),
+    contact: document.getElementById('contact').value.trim(),
+    category: document.getElementById('category').value,
+    subject: document.getElementById('subject').value.trim(),
+    message: document.getElementById('message').value.trim(),
+    date: new Date().toLocaleString('fa-IR')
+  };
+
+  const title = `🎫 [تیکت] ${ticket.subject}`;
+  const body = `**👤 نام:** ${ticket.name}
+**📞 تماس:** ${ticket.contact}
+**📂 دسته:** ${ticket.category}
+
+---
+
+### 💬 پیام:
+${ticket.message}
+
+---
+🕐 ${ticket.date}`;
+
+  try {
+    if (!GITHUB_TOKEN) {
+      // اگه توکن نداری → با لینک Issue باز کن (کاربر خودش باید ثبت کنه)
+      const url = `https://github.com/${GITHUB_USER}/${GITHUB_REPO}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}&labels=ticket`;
+      document.getElementById('ticketNum').textContent = "—";
+      document.getElementById('ticketLink').href = url;
+      document.getElementById('resultBox').style.display = 'block';
+      document.getElementById('resultBox').innerHTML = `
+        <b>✅ تیکت آماده ارسال شد!</b><br>
+        یه صفحه باز میشه → فقط بزن <b style="color:#4ade80;">Submit new issue</b> → تمام!<br><br>
+        <a href="${url}" target="_blank" style="background:#3b82f6; color:#fff; padding:10px 20px; border-radius:10px; text-decoration:none; display:inline-block;">📨 ارسال تیکت به GitHub</a>
+      `;
+      document.getElementById('ticketForm').reset();
+      btn.disabled = false; btn.textContent = '🚀 ارسال تیکت';
+      return;
+    }
+
+    // با توکن → خودکار ایجاد Issue
+    const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/issues`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `token ${GITHUB_TOKEN}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ title, body, labels: ['ticket'] })
+    });
+
+    if (!res.ok) throw new Error('GitHub API error');
+
+    const data = await res.json();
+    document.getElementById('ticketNum').textContent = `#${data.number}`;
+    document.getElementById('ticketLink').href = data.html_url;
+    document.getElementById('resultBox').style.display = 'block';
+    document.getElementById('ticketForm').reset();
+
+  } catch (err) {
+    console.error(err);
+    alert('❌ ارسال نشد. دوباره تلاش کن.');
+  } finally {
+    btn.disabled = false; btn.textContent = '🚀 ارسال تیکت';
+  }
+};
+</script>
+
+</body>
+</html>
