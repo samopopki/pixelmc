@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixelMC | سرور ماینکرافت</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+  body { background: linear-gradient(135deg, #0a0a1a, #1e3a8a, #0f172a); color: #fff; min-height: 100vh; }
+
+  header {
+    background: rgba(0,0,0,0.4); backdrop-filter: blur(10px);
+    padding: 12px 30px; display: flex; justify-content: space-between;
+    align-items: center; position: sticky; top: 0; z-index: 100;
+    border-bottom: 2px solid #3b82f6; flex-wrap: wrap; gap: 10px;
+  }
+  .logo-img { height: 50px; cursor: pointer; border-radius: 8px; }
+  nav { display: flex; gap: 20px; flex-wrap: wrap; }
+  nav a { color: #ddd; text-decoration: none; font-size: 15px; cursor: pointer; }
+  nav a:hover { color: #60a5fa; }
+
+  .user-info { display: flex; align-items: center; gap: 10px; font-size: 13px; flex-wrap: wrap; }
+  .user-info .email { color: #60a5fa; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .logout-btn { background: #dc2626; color: #fff; border: none; padding: 7px 14px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold; }
+  .admin-badge { background: #f59e0b; color: #000; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; }
+
+  .hero { text-align: center; padding: 60px 20px 30px; }
+  .hero h1 { font-size: 48px; margin-bottom: 15px; background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { font-size: 17px; color: #bbb; max-width: 600px; margin: 0 auto; line-height: 1.7; }
+
+  .logo-showcase { display: flex; justify-content: center; gap: 25px; padding: 25px 20px 40px; flex-wrap: wrap; }
+  .logo-box { background: rgba(255,255,255,0.05); border: 2px solid rgba(59, 130, 246, 0.3); border-radius: 18px; padding: 18px; transition: 0.4s; }
+  .logo-box:hover { transform: translateY(-8px); border-color: #3b82f6; }
+  .logo-box img { max-width: 200px; border-radius: 12px; display: block; }
+  .logo-box p { text-align: center; color: #60a5fa; margin-top: 10px; font-size: 13px; font-weight: bold; }
+
+  .servers { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; padding: 20px; }
+  .server-card { background: rgba(255,255,255,0.05); border: 2px solid rgba(59, 130, 246, 0.3); border-radius: 18px; padding: 25px; width: 300px; text-align: center; transition: 0.4s; }
+  .server-card:hover { transform: translateY(-10px); border-color: #3b82f6; }
+  .server-icon { font-size: 50px; margin-bottom: 12px; }
+  .server-card h2 { font-size: 24px; margin-bottom: 8px; }
+  .server-type { display: inline-block; padding: 5px 14px; border-radius: 20px; font-size: 12px; margin-bottom: 12px; font-weight: bold; }
+  .type-survival { background: #16a34a; }
+  .type-rp { background: #dc2626; }
+  .ip-box { background: rgba(0,0,0,0.5); border-radius: 10px; padding: 10px; margin: 12px 0; font-family: monospace; font-size: 14px; color: #4ade80; direction: ltr; border: 1px solid rgba(74, 222, 128, 0.3); word-break: break-all; }
+  .copy-btn { background: linear-gradient(90deg, #3b82f6, #60a5fa); color: #fff; border: none; padding: 11px; border-radius: 25px; font-size: 14px; font-weight: bold; cursor: pointer; width: 100%; }
+  .copy-btn.copied { background: #16a34a; }
+
+  .buy-section { text-align: center; padding: 40px 20px; }
+  .buy-btn { display: inline-block; background: linear-gradient(90deg, #3b82f6, #60a5fa); color: #fff; text-decoration: none; padding: 17px 45px; border-radius: 50px; font-size: 18px; font-weight: bold; box-shadow: 0 10px 30px rgba(59, 130, 246, 0.5); }
+
+  .section { padding: 50px 20px; max-width: 900px; margin: 0 auto; }
+  .section-title { text-align: center; font-size: 32px; margin-bottom: 10px; background: linear-gradient(90deg, #3b82f6, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .section-subtitle { text-align: center; color: #aaa; margin-bottom: 25px; font-size: 15px; }
+
+  .form-box { background: rgba(255,255,255,0.05); border: 2px solid rgba(59, 130, 246, 0.3); border-radius: 18px; padding: 25px; }
+  .form-group { margin-bottom: 15px; }
+  .form-group label { display: block; margin-bottom: 7px; color: #ddd; font-size: 14px; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 11px 14px; background: rgba(0,0,0,0.4); border: 2px solid rgba(59, 130, 246, 0.2); border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #3b82f6; }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+
+  .submit-btn { width: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); color: #fff; border: none; padding: 13px; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; }
+  .submit-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(59, 130, 246, 0.5); }
+  .submit-btn:disabled { opacity: 0.6; }
+
+  .ticket-item { background: rgba(255,255,255,0.05); border-right: 4px solid #3b82f6; border-radius: 10px; padding: 15px; margin-bottom: 12px; }
+  .ticket-item.answered { border-right-color: #16a34a; }
+  .ticket-head { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; flex-wrap: wrap; gap: 8px; }
+  .ticket-title { color: #60a5fa; font-weight: bold; }
+  .ticket-status { background: #f59e0b; padding: 3px 10px; border-radius: 10px; font-size: 11px; color: #000; }
+  .ticket-status.answered { background: #16a34a; color: #fff; }
+  .ticket-msg { color: #ccc; font-size: 13px; line-height: 1.6; }
+  .ticket-reply { background: rgba(22, 163, 74, 0.15); border-right: 3px solid #16a34a; padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 13px; }
+  .ticket-meta { color: #888; font-size: 11px; margin-top: 8px; font-family: monospace; }
+
+  .admin-panel { display: none; padding: 30px 20px; max-width: 900px; margin: 0 auto; }
+  .admin-panel.show { display: block; }
+  .admin-ticket { background: rgba(255,255,255,0.05); border: 2px solid rgba(59, 130, 246, 0.3); border-radius: 14px; padding: 18px; margin-bottom: 14px; }
+  .admin-ticket textarea { width: 100%; padding: 10px; background: rgba(0,0,0,0.4); border: 2px solid rgba(59, 130, 246, 0.3); border-radius: 10px; color: #fff; font-size: 13px; min-height: 70px; margin-top: 10px; }
+  .admin-ticket .reply-btn { background: #16a34a; color: #fff; border: none; padding: 9px 22px; border-radius: 10px; font-size: 13px; font-weight: bold; cursor: pointer; margin-top: 8px; margin-left: 8px; }
+  .admin-ticket .delete-btn { background: #dc2626; color: #fff; border: none; padding: 9px 22px; border-radius: 10px; font-size: 13px; font-weight: bold; cursor: pointer; margin-top: 8px; }
+
+  .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: linear-gradient(135deg, #1e293b, #0f172a); border: 2px solid #3b82f6; border-radius: 18px; padding: 30px; width: 100%; max-width: 380px; }
+  .modal h2 { text-align: center; margin-bottom: 20px; color: #60a5fa; font-size: 22px; }
+  .modal .tabs { display: flex; margin-bottom: 18px; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 4px; }
+  .modal .tab { flex: 1; padding: 9px; text-align: center; cursor: pointer; border-radius: 8px; font-size: 13px; }
+  .modal .tab.active { background: #3b82f6; font-weight: bold; }
+  .modal input { width: 100%; padding: 11px 14px; background: rgba(0,0,0,0.4); border: 2px solid rgba(59, 130, 246, 0.3); border-radius: 10px; color: #fff; font-size: 13px; margin-bottom: 12px; }
+  .modal .action-btn { width: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); color: #fff; border: none; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; }
+  .modal .close-btn { width: 100%; background: transparent; color: #888; border: none; padding: 10px; margin-top: 8px; cursor: pointer; font-size: 12px; }
+  .modal .msg { text-align: center; font-size: 13px; margin-top: 10px; min-height: 18px; }
+  .modal .msg.error { color: #f87171; }
+  .modal .msg.success { color: #4ade80; }
+
+  footer { text-align: center; padding: 25px; background: rgba(0,0,0,0.5); color: #888; margin-top: 50px; border-top: 2px solid rgba(59, 130, 246, 0.3); font-size: 13px; }
+  footer a { color: #60a5fa; text-decoration: none; margin: 0 8px; }
+
+  @media (max-width: 700px) {
+    header { padding: 12px 15px; }
+    .hero h1 { font-size: 30px; }
+    .server-card { width: 100%; }
+    .logo-box img { max-width: 150px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="logo-dark.png" alt="PixelMC" class="logo-img" onclick="location.href='#'">
+  <nav>
+    <a onclick="scrollToSection('servers')">سرورها</a>
+    <a onclick="scrollToSection('buy')">خرید رنک</a>
+    <a onclick="scrollToSection('ticket')">تیکت</a>
+    <a onclick="scrollToSection('adminPanel')" id="adminLink" style="display:none; color:#f59e0b;">👑 ادمین</a>
+  </nav>
+  <div class="user-info" id="userInfo">
+    <button class="submit-btn" style="width:auto; padding:7px 18px; font-size:12px;" onclick="openLoginModal()">🔐 ورود</button>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>به PixelMC خوش آمدید</h1>
+  <p>بهترین تجربه سروایول و رول‌پلی ماینکرافت! به ما بپیوند و ماجراجویی خودت رو شروع کن.</p>
+</section>
+
+<section class="logo-showcase">
+  <div class="logo-box">
+    <img src="logo-dark.png" alt="PixelMC">
+    <p>⚔️ PixelMC — Survival</p>
+  </div>
+  <div class="logo-box">
+    <img src="logo-light.png" alt="SamGames">
+    <p>🎭 SamGames — RolePlay</p>
+  </div>
+</section>
+
+<section class="servers" id="servers">
+  <div class="server-card">
+    <div class="server-icon">⚔️</div>
+    <h2>PixelMC</h2>
+    <span class="server-type type-survival">Survival</span>
+    <div class="ip-box">pixelmc.jo3.org</div>
+    <button class="copy-btn" onclick="copyIP(this, 'pixelmc.jo3.org')">📋 کپی آیپی</button>
+  </div>
+  <div class="server-card">
+    <div class="server-icon">🎭</div>
+    <h2>PixelRP</h2>
+    <span class="server-type type-rp">RolePlay</span>
+    <div class="ip-box">PixelRp.aternos.me</div>
+    <button class="copy-btn" onclick="copyIP(this, 'PixelRp.aternos.me')">📋 کپی آیپی</button>
+  </div>
+</section>
+
+<section class="buy-section" id="buy">
+  <a href="https://daramet.com/pixelsmp" target="_blank" class="buy-btn">💎 خرید رنک از دارمت</a>
+</section>
+
+<section class="section" id="ticket">
+  <h2 class="section-title">🎫 سیستم تیکت</h2>
+  <p class="section-subtitle">مشکلی داری؟ تیکت بفرست تا بررسی کنیم.</p>
+
+  <div id="loginRequired" style="text-align:center; padding:25px; background:rgba(245,158,11,0.1); border:2px solid #f59e0b; border-radius:15px;">
+    <p style="margin-bottom:15px; color:#f59e0b; font-size:14px;">⚠️ برای ارسال تیکت باید وارد حساب بشی</p>
+    <button class="submit-btn" style="width:auto; padding:11px 25px;" onclick="openLoginModal()">🔐 ورود / ثبت‌نام</button>
+  </div>
+
+  <form class="form-box" id="ticketForm" onsubmit="sendTicket(event)" style="display:none;">
+    <div class="form-group">
+      <label>دسته‌بندی</label>
+      <select id="category" required>
+        <option value="">انتخاب کن...</option>
+        <option>مشکل فنی سرور</option>
+        <option>خرید رنک</option>
+        <option>گزارش بازیکن</option>
+        <option>درخواست آنبن</option>
+        <option>سوال عمومی</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>موضوع</label>
+      <input type="text" id="subject" placeholder="خلاصه مشکل" required>
+    </div>
+    <div class="form-group">
+      <label>توضیحات کامل</label>
+      <textarea id="message" placeholder="مشکل رو کامل توضیح بده..." required></textarea>
+    </div>
+    <button type="submit" class="submit-btn">🚀 ارسال تیکت</button>
+  </form>
+
+  <div id="ticketsList" style="margin-top:30px; display:none;">
+    <h3 style="color:#60a5fa; margin-bottom:15px; font-size:18px;">📨 تیکت‌ها</h3>
+    <div id="ticketsContainer"></div>
+  </div>
+</section>
+
+<section class="admin-panel" id="adminPanel">
+  <h2 class="section-title" style="color:#f59e0b; -webkit-text-fill-color:#f59e0b;">👑 پنل ادمین</h2>
+  <div id="adminTicketsContainer"></div>
+</section>
+
+<footer>
+  <div>
+    <a href="https://daramet.com/pixelsmp" target="_blank">دارمت</a> |
+    <a onclick="scrollToSection('ticket')">پشتیبانی</a>
+  </div>
+  <p style="margin-top:8px;">© 2025 PixelMC — تمامی حقوق محفوظ است.</p>
+</footer>
+
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <h2 id="modalTitle">🔐 ورود به حساب</h2>
+    <div class="tabs">
+      <div class="tab active" id="tabLogin" onclick="switchTab('login')">ورود</div>
+      <div class="tab" id="tabSignup" onclick="switchTab('signup')">ثبت‌نام</div>
+    </div>
+    <input type="email" id="authEmail" placeholder="ایمیل" required>
+    <input type="password" id="authPassword" placeholder="رمز عبور (حداقل ۶ کاراکتر)" required>
+    <button class="action-btn" id="authBtn" onclick="handleAuth()">ورود</button>
+    <button class="close-btn" onclick="closeLoginModal()">انصراف</button>
+    <div class="msg" id="authMsg"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ⚙️ این دو خط رو از jsonbin.io بگیر و بذار
+   ============================================================ */
+const JSONBIN_BIN_ID = "PASTE_BIN_ID";       // ← Bin ID خودت
+const JSONBIN_API_KEY = "PASTE_API_KEY";     // ← API Key خودت
+/* ============================================================ */
+
+const ADMIN_EMAILS = ["admin@mail.com"];
+
+let currentUser = null;
+let currentMode = 'login';
+let allTickets = [];
+
+// ===== اسکرول =====
+window.scrollToSection = (id) => {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+};
+
+// ===== کپی آیپی =====
+window.copyIP = (btn, ip) => {
+  navigator.clipboard.writeText(ip).then(() => {
+    const original = btn.textContent;
+    btn.textContent = '✅ کپی شد!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1500);
+  });
+};
+
+// ===== خواندن تیکت‌ها از JSONBin =====
+async function fetchTickets() {
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': JSONBIN_API_KEY }
+    });
+    const data = await res.json();
+    allTickets = data.record.tickets || [];
+    return allTickets;
+  } catch (err) {
+    console.error('Fetch error:', err);
+    return [];
+  }
+}
+
+// ===== ذخیره تیکت‌ها در JSONBin =====
+async function saveTickets(tickets) {
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': JSONBIN_API_KEY
+      },
+      body: JSON.stringify({ tickets })
+    });
+    return res.ok;
+  } catch (err) {
+    console.error('Save error:', err);
+    return false;
+  }
+}
+
+// ===== لود کاربر =====
+function loadUser() {
+  const user = localStorage.getItem('pixelmc_current_user');
+  if (user) currentUser = JSON.parse(user);
+  updateUI();
+  if (currentUser) loadTicketsFromServer();
+}
+
+// ===== ادمین =====
+function isAdmin() {
+  return currentUser && ADMIN_EMAILS.includes(currentUser.email);
+}
+
+// ===== آپدیت UI =====
+function updateUI() {
+  const userInfo = document.getElementById('userInfo');
+  const form = document.getElementById('ticketForm');
+  const loginReq = document.getElementById('loginRequired');
+  const adminLink = document.getElementById('adminLink');
+
+  if (currentUser) {
+    userInfo.innerHTML = `
+      <span class="email">${currentUser.email}</span>
+      ${isAdmin() ? '<span class="admin-badge">👑 ادمین</span>' : ''}
+      <button class="logout-btn" onclick="doLogout()">خروج</button>
+    `;
+    form.style.display = 'block';
+    loginReq.style.display = 'none';
+    adminLink.style.display = isAdmin() ? 'inline' : 'none';
+    if (!isAdmin()) document.getElementById('adminPanel').classList.remove('show');
+    else document.getElementById('adminPanel').classList.add('show');
+  } else {
+    userInfo.innerHTML = `<button class="submit-btn" style="width:auto; padding:7px 18px; font-size:12px;" onclick="openLoginModal()">🔐 ورود</button>`;
+    form.style.display = 'none';
+    loginReq.style.display = 'block';
+    adminLink.style.display = 'none';
+    document.getElementById('adminPanel').classList.remove('show');
+  }
+}
+
+// ===== مودال =====
+window.openLoginModal = () => {
+  document.getElementById('loginModal').classList.add('show');
+  document.getElementById('authMsg').textContent = '';
+};
+window.closeLoginModal = () => document.getElementById('loginModal').classList.remove('show');
+
+window.switchTab = (mode) => {
+  currentMode = mode;
+  document.getElementById('tabLogin').classList.toggle('active', mode === 'login');
+  document.getElementById('tabSignup').classList.toggle('active', mode === 'signup');
+  document.getElementById('modalTitle').textContent = mode === 'login' ? '🔐 ورود به حساب' : '✨ ثبت‌نام';
+  document.getElementById('authBtn').textContent = mode === 'login' ? 'ورود' : 'ثبت‌نام';
+  document.getElementById('authMsg').textContent = '';
+};
+
+// ===== احراز هویت =====
+window.handleAuth = () => {
+  const email = document.getElementById('authEmail').value.trim().toLowerCase();
+  const password = document.getElementById('authPassword').value;
+  const msg = document.getElementById('authMsg');
+
+  msg.className = 'msg'; msg.textContent = '';
+
+  if (!email || !password) {
+    msg.className = 'msg error'; msg.textContent = 'ایمیل و رمز رو پر کن'; return;
+  }
+  if (!email.includes('@')) {
+    msg.className = 'msg error'; msg.textContent = 'ایمیل نامعتبر'; return;
+  }
+  if (password.length < 6) {
+    msg.className = 'msg error'; msg.textContent = 'رمز باید حداقل ۶ کاراکتر باشه'; return;
+  }
+
+  let users = JSON.parse(localStorage.getItem('pixelmc_users') || '[]');
+
+  if (currentMode === 'signup') {
+    if (users.find(u => u.email === email)) {
+      msg.className = 'msg error'; msg.textContent = '❌ این ایمیل قبلاً ثبت شده'; return;
+    }
+    users.push({ email, password });
+    localStorage.setItem('pixelmc_users', JSON.stringify(users));
+    localStorage.setItem('pixelmc_current_user', JSON.stringify({ email }));
+    currentUser = { email };
+    msg.className = 'msg success'; msg.textContent = '✅ ثبت‌نام موفق!';
+    setTimeout(() => { closeLoginModal(); updateUI(); loadTicketsFromServer(); }, 800);
+  } else {
+    const user = users.find(u => u.email === email && u.password === password);
+    if (!user) {
+      msg.className = 'msg error'; msg.textContent = '❌ ایمیل یا رمز اشتباهه'; return;
+    }
+    localStorage.setItem('pixelmc_current_user', JSON.stringify({ email }));
+    currentUser = { email };
+    msg.className = 'msg success'; msg.textContent = '✅ خوش اومدی!';
+    setTimeout(() => { closeLoginModal(); updateUI(); loadTicketsFromServer(); }, 800);
+  }
+};
+
+// ===== خروج =====
+window.doLogout = () => {
+  if (confirm('از حساب خارج میشی؟')) {
+    localStorage.removeItem('pixelmc_current_user');
+    currentUser = null;
+    updateUI();
+    document.getElementById('ticketsList').style.display = 'none';
+  }
+};
+
+// ===== ارسال تیکت =====
+window.sendTicket = async (e) => {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true; btn.textContent = '⏳ در حال ارسال...';
+
+  const ticket = {
+    id: 'TK-' + Math.floor(1000 + Math.random() * 9000),
+    email: currentUser.email,
+    category: document.getElementById('category').value,
+    subject: document.getElementById('subject').value.trim(),
+    message: document.getElementById('message').value.trim(),
+    status: 'pending',
+    reply: '',
+    createdAt: new Date().toLocaleString('fa-IR')
+  };
+
+  // گرفتن تیکت‌های موجود
+  const tickets = await fetchTickets();
+  tickets.push(ticket);
+
+  // ذخیره
+  const ok = await saveTickets(tickets);
+
+  if (ok) {
+    alert('✅ تیکت ارسال شد!\nشماره: ' + ticket.id);
+    e.target.reset();
+    loadTicketsFromServer();
+  } else {
+    alert('❌ خطا در ارسال. دوباره تلاش کن.');
+  }
+
+  btn.disabled = false; btn.textContent = '🚀 ارسال تیکت';
+};
+
+// ===== لود و نمایش تیکت‌ها =====
+async function loadTicketsFromServer() {
+  await fetchTickets();
+  renderTickets();
+  if (isAdmin()) renderAdminTickets();
+}
+
+// ===== نمایش تیکت‌ها (برای کاربر) =====
+function renderTickets() {
+  const list = document.getElementById('ticketsList');
+  const container = document.getElementById('ticketsContainer');
+
+  // کاربر عادی فقط تیکت‌های خودش، ادمین همه
+  const myTickets = isAdmin() ? allTickets : allTickets.filter(t => t.email === currentUser.email);
+
+  if (myTickets.length === 0) {
+    list.style.display = 'none';
+    return;
+  }
+  list.style.display = 'block';
+  container.innerHTML = myTickets.slice().reverse().map(t => `
+    <div class="ticket-item ${t.status === 'answered' ? 'answered' : ''}">
+      <div class="ticket-head">
+        <span class="ticket-title">${escapeHtml(t.subject)}</span>
+        <span class="ticket-status ${t.status === 'answered' ? 'answered' : ''}">
+          ${t.status === 'answered' ? '✅ پاسخ داده' : '⏳ در انتظار'}
+        </span>
+      </div>
+      <div class="ticket-msg">
+        <strong>📂 دسته:</strong> ${escapeHtml(t.category)}<br>
+        ${isAdmin() ? `<strong>👤 کاربر:</strong> ${escapeHtml(t.email)}<br>` : ''}
+        <strong>💬 پیام:</strong> ${escapeHtml(t.message)}
+      </div>
+      ${t.reply ? `<div class="ticket-reply"><b>✅ پاسخ ادمین:</b><br>${escapeHtml(t.reply)}</div>` : ''}
+      <div class="ticket-meta">🆔 ${t.id} • 🕐 ${t.createdAt}</div>
+    </div>
+  `).join('');
+}
+
+// ===== پنل ادمین =====
+function renderAdminTickets() {
+  const container = document.getElementById('adminTicketsContainer');
+  if (!allTickets || allTickets.length === 0) {
+    container.innerHTML = `<div style="text-align:center; color:#888; padding:30px;">هنوز تیکتی نیست</div>`;
+    return;
+  }
+  container.innerHTML = allTickets.slice().reverse().map(t => `
+    <div class="admin-ticket">
+      <div style="color:#60a5fa; font-weight:bold; font-size:15px; margin-bottom:8px;">${escapeHtml(t.subject)}</div>
+      <div style="color:#f59e0b; font-size:12px; margin-bottom:10px;">👤 ${escapeHtml(t.email)} • 📂 ${escapeHtml(t.category)} • 🆔 ${t.id}</div>
+      <div style="color:#ccc; line-height:1.7; font-size:13px;">${escapeHtml(t.message)}</div>
+      ${t.reply ? `<div class="ticket-reply"><b>پاسخ قبلی:</b><br>${escapeHtml(t.reply)}</div>` : ''}
+      <textarea id="reply_${t.id}" placeholder="پاسخ...">${escapeHtml(t.reply || '')}</textarea>
+      <button class="reply-btn" onclick="submitReply('${t.id}')">📨 ارسال پاسخ</button>
+      <button class="delete-btn" onclick="deleteTicket('${t.id}')">🗑️ حذف</button>
+    </div>
+  `).join('');
+}
+
+window.submitReply = async (id) => {
+  const reply = document.getElementById('reply_' + id).value.trim();
+  if (!reply) return alert('پاسخ رو بنویس');
+
+  const tickets = await fetchTickets();
+  const updated = tickets.map(t => t.id === id ? { ...t, reply, status: 'answered' } : t);
+  const ok = await saveTickets(updated);
+
+  if (ok) {
+    alert('✅ پاسخ ثبت شد');
+    loadTicketsFromServer();
+  } else {
+    alert('❌ خطا در ذخیره');
+  }
+};
+
+window.deleteTicket = async (id) => {
+  if (!confirm('حذف بشه؟')) return;
+  const tickets = await fetchTickets();
+  const updated = tickets.filter(t => t.id !== id);
+  const ok = await saveTickets(updated);
+  if (ok) loadTicketsFromServer();
+};
+
+// ===== امنیت =====
+function escapeHtml(text) {
+  if (!text) return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// ===== شروع =====
+loadUser();
+</script>
+
+</body>
+</html>
