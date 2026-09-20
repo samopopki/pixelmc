@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PixelMC | سرور ماینکرافت</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Tahoma,Arial,sans-serif;
+  background:#0b1020;
+  color:#fff;
+}
+
+header{
+  background:linear-gradient(135deg,#111a38,#182c63);
+  padding:25px 15px;
+  text-align:center;
+  border-bottom:2px solid #2e6cff;
+}
+
+.logo{
+  font-size:35px;
+  font-weight:bold;
+  color:#4d8dff;
+}
+
+.subtitle{
+  color:#b9c7e8;
+  margin-top:8px;
+}
+
+.container{
+  width:min(1000px,94%);
+  margin:25px auto;
+}
+
+.card{
+  background:#121a2d;
+  border:1px solid #263657;
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 10px 30px #0005;
+}
+
+h2{
+  margin-top:0;
+  color:#69a0ff;
+}
+
+input,textarea{
+  width:100%;
+  padding:13px;
+  margin:7px 0;
+  border:1px solid #34476e;
+  border-radius:10px;
+  background:#0b1222;
+  color:#fff;
+  outline:none;
+}
+
+textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:12px 18px;
+  margin:5px;
+  cursor:pointer;
+  font-weight:bold;
+  background:#3478ff;
+  color:white;
+}
+
+button:hover{
+  opacity:.85;
+}
+
+.logout{
+  background:#d93636;
+}
+
+.register{
+  background:#19a974;
+}
+
+.status{
+  padding:12px;
+  border-radius:10px;
+  background:#0c1528;
+  margin:10px 0;
+}
+
+.online{
+  color:#35e68a;
+}
+
+.offline{
+  color:#ff6868;
+}
+
+.profile{
+  display:none;
+}
+
+#authArea{
+  display:block;
+}
+
+.ticket{
+  background:#0b1222;
+  padding:15px;
+  border-radius:12px;
+  margin:10px 0;
+  border:1px solid #283b60;
+}
+
+.ticket-reply{
+  background:#102b25;
+  border:1px solid #1f765e;
+  padding:10px;
+  border-radius:10px;
+  margin:10px 0;
+}
+
+.delete-btn{
+  background:#c73535;
+}
+
+.reply-btn{
+  background:#7a55df;
+}
+
+.small{
+  color:#9eacc9;
+  font-size:13px;
+}
+
+footer{
+  text-align:center;
+  color:#8997b5;
+  padding:30px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">⛏️ PixelMC</div>
+  <div class="subtitle">سرور ماینکرافت | PixelMC</div>
+</header>
+
+<div class="container">
+
+  <!-- وضعیت سرور -->
+  <div class="card">
+    <h2>🟢 وضعیت سرور</h2>
+
+    <div class="status">
+      وضعیت:
+      <b id="serverStatus" class="offline">در حال بررسی...</b>
+    </div>
+
+    <div class="status">
+      بازیکنان آنلاین:
+      <b id="playersOnline">0</b>
+    </div>
+  </div>
+
+
+  <!-- ثبت نام و ورود -->
+  <div class="card" id="authArea">
+
+    <h2>👤 حساب کاربری</h2>
+
+    <div id="loginForm">
+
+      <input
+        id="loginEmail"
+        type="email"
+        placeholder="ایمیل"
+      >
+
+      <input
+        id="loginPassword"
+        type="password"
+        placeholder="رمز عبور"
+      >
+
+      <button onclick="login()">🔐 ورود</button>
+
+      <button class="register" onclick="showRegister()">
+        📝 ثبت نام
+      </button>
+
+    </div>
+
+
+    <div id="registerForm" style="display:none">
+
+      <input
+        id="registerEmail"
+        type="email"
+        placeholder="ایمیل"
+      >
+
+      <input
+        id="registerPassword"
+        type="password"
+        placeholder="رمز عبور حداقل ۶ کاراکتر"
+      >
+
+      <button class="register" onclick="register()">
+        📝 ثبت نام
+      </button>
+
+      <button onclick="showLogin()">
+        ↩️ بازگشت به ورود
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- پروفایل -->
+  <div class="card profile" id="profileBox">
+
+    <h2>👋 پروفایل من</h2>
+
+    <p>
+      ایمیل:
+      <b id="userEmail"></b>
+    </p>
+
+    <p>
+      شناسه کاربر:
+      <span class="small" id="userId"></span>
+    </p>
+
+    <button class="logout" onclick="logout()">
+      🚪 خروج از حساب
+    </button>
+
+  </div>
+
+
+  <!-- تیکت -->
+  <div class="card profile" id="ticketBox">
+
+    <h2>🎫 پشتیبانی</h2>
+
+    <textarea
+      id="ticketMessage"
+      placeholder="پیام خود را بنویسید..."
+    ></textarea>
+
+    <button onclick="createTicket()">
+      📨 ارسال تیکت
+    </button>
+
+    <div id="tickets"></div>
+
+  </div>
+
+</div>
+
+
+<footer>
+  PixelMC © 2026
+</footer>
+
+
+<script>
+
+// ==========================================
+// SUPABASE
+// ==========================================
+
+const SUPABASE_URL =
+"https://erhdlbppnaavbteiayqk.supabase.co";
+
+const SUPABASE_KEY =
+"113362@Sh90";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+// ==========================================
+// کاربر فعلی
+// ==========================================
+
+let currentUser = null;
+
+
+// ==========================================
+// نمایش فرم ثبت نام
+// ==========================================
+
+window.showRegister = function(){
+
+  document.getElementById("loginForm").style.display = "none";
+
+  document.getElementById("registerForm").style.display = "block";
+
+};
+
+
+// ==========================================
+// نمایش فرم ورود
+// ==========================================
+
+window.showLogin = function(){
+
+  document.getElementById("registerForm").style.display = "none";
+
+  document.getElementById("loginForm").style.display = "block";
+
+};
+
+
+// ==========================================
+// ثبت نام
+// ==========================================
+
+window.register = async function(){
+
+  const email =
+    document.getElementById("registerEmail").value.trim();
+
+  const password =
+    document.getElementById("registerPassword").value;
+
+
+  if(!email || !password){
+
+    alert("❌ ایمیل و رمز عبور را وارد کن");
+
+    return;
+  }
+
+
+  if(password.length < 6){
+
+    alert("❌ رمز عبور باید حداقل ۶ کاراکتر باشد");
+
+    return;
+  }
+
+
+  const {data,error} =
+    await db.auth.signUp({
+
+      email:email,
+
+      password:password
+
+    });
+
+
+  if(error){
+
+    alert("❌ خطا در ثبت نام:\n" + error.message);
+
+    return;
+  }
+
+
+  alert(
+    "✅ ثبت نام با موفقیت انجام شد!\n\n" +
+    "اگر تأیید ایمیل فعال باشد، ایمیل خود را بررسی کن."
+  );
+
+
+  showLogin();
+
+};
+
+
+// ==========================================
+// ورود
+// ==========================================
+
+window.login = async function(){
+
+  const email =
+    document.getElementById("loginEmail").value.trim();
+
+  const password =
+    document.getElementById("loginPassword").value;
+
+
+  if(!email || !password){
+
+    alert("❌ ایمیل و رمز عبور را وارد کن");
+
+    return;
+  }
+
+
+  const {data,error} =
+    await db.auth.signInWithPassword({
+
+      email:email,
+
+      password:password
+
+    });
+
+
+  if(error){
+
+    alert("❌ ورود ناموفق:\n" + error.message);
+
+    return;
+  }
+
+
+  currentUser = data.user;
+
+  updateUI();
+
+};
+
+
+// ==========================================
+// خروج
+// ==========================================
+
+window.logout = async function(){
+
+  const {error} = await db.auth.signOut();
+
+
+  if(error){
+
+    alert("❌ خطا: " + error.message);
+
+    return;
+  }
+
+
+  currentUser = null;
+
+  updateUI();
+
+};
+
+
+// ==========================================
+// بروزرسانی رابط کاربری
+// ==========================================
+
+function updateUI(){
+
+  const authArea =
+    document.getElementById("authArea");
+
+  const profileBox =
+    document.getElementById("profileBox");
+
+  const ticketBox =
+    document.getElementById("ticketBox");
+
+
+  if(currentUser){
+
+    authArea.style.display = "none";
+
+    profileBox.style.display = "block";
+
+    ticketBox.style.display = "block";
+
+
+    document.getElementById("userEmail").textContent =
+      currentUser.email || "";
+
+    document.getElementById("userId").textContent =
+      currentUser.id || "";
+
+
+    loadTicketsFromServer();
+
+  }else{
+
+    authArea.style.display = "block";
+
+    profileBox.style.display = "none";
+
+    ticketBox.style.display = "none";
+
+  }
+
+}
+
+
+// ==========================================
+// ساخت تیکت
+// ==========================================
+
+window.createTicket = async function(){
+
+  if(!currentUser){
+
+    alert("ابتدا وارد حساب شو");
+
+    return;
+  }
+
+
+  const message =
+    document.getElementById("ticketMessage").value.trim();
+
+
+  if(!message){
+
+    alert("پیام را بنویس");
+
+    return;
+  }
+
+
+  const {error} =
+    await db.from("tickets").insert({
+
+      user_id:currentUser.id,
+
+      message:message,
+
+      status:"open"
+
+    });
+
+
+  if(error){
+
+    alert("❌ خطا: " + error.message);
+
+    return;
+  }
+
+
+  document.getElementById("ticketMessage").value = "";
+
+
+  alert("✅ تیکت ارسال شد");
+
+
+  await loadTicketsFromServer();
+
+};
+
+
+// ==========================================
+// Escape HTML
+// ==========================================
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+// ==========================================
+// بارگذاری تیکت‌ها
+// ==========================================
+
+async function loadTicketsFromServer(){
+
+  if(!currentUser) return;
+
+
+  const {data,error} =
+    await db
+      .from("tickets")
+      .select("*")
+      .eq("user_id",currentUser.id)
+      .order("created_at",{ascending:false});
+
+
+  if(error){
+
+    console.log(error);
+
+    return;
+  }
+
+
+  const box =
+    document.getElementById("tickets");
+
+
+  if(!data || data.length === 0){
+
+    box.innerHTML =
+      "<p class='small'>هنوز تیکتی ثبت نکرده‌ای.</p>";
+
+    return;
+  }
+
+
+  box.innerHTML =
+    data.map(t => `
+
+      <div class="ticket">
+
+        <b>🎫 تیکت</b>
+
+        <p>
+          ${escapeHtml(t.message)}
+        </p>
+
+        <div class="small">
+          وضعیت:
+          ${escapeHtml(t.status || "open")}
+        </div>
+
+        ${
+          t.reply
+          ?
+          `
+          <div class="ticket-reply">
+            <b>پاسخ پشتیبانی:</b><br>
+            ${escapeHtml(t.reply)}
+          </div>
+          `
+          :
+          ""
+        }
+
+      </div>
+
+    `).join("");
+
+}
+
+
+// ==========================================
+// وضعیت ورود Supabase
+// ==========================================
+
+async function init(){
+
+  const {data} =
+    await db.auth.getSession();
+
+
+  currentUser =
+    data.session?.user || null;
+
+
+  updateUI();
+
+
+  db.auth.onAuthStateChange(
+    async (_event,session)=>{
+
+      currentUser =
+        session?.user || null;
+
+      updateUI();
+
+    }
+  );
+
+}
+
+
+// ==========================================
+// وضعیت سرور
+// ==========================================
+
+function checkServer(){
+
+  // این قسمت فعلاً نمایشی است.
+  // بعداً می‌توانیم آن را به API واقعی
+  // سرور Minecraft وصل کنیم.
+
+  document.getElementById("serverStatus").textContent =
+    "آنلاین";
+
+  document.getElementById("serverStatus").className =
+    "online";
+
+  document.getElementById("playersOnline").textContent =
+    "0";
+
+}
+
+
+// ==========================================
+// شروع
+// ==========================================
+
+init();
+
+checkServer();
+
+</script>
+
+</body>
+</html>
