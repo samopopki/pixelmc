@@ -1,0 +1,2748 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixelMC site SAMGAMES</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+body{
+font-family:Tahoma,Arial,sans-serif;
+background:#050b18;
+color:#fff;
+line-height:1.8
+}
+
+button,input,textarea,select{font-family:inherit}
+button{cursor:pointer}
+
+header{
+position:sticky;
+top:0;
+z-index:1000;
+background:rgba(5,11,24,.97);
+border-bottom:1px solid #18345f;
+backdrop-filter:blur(12px)
+}
+
+.nav{
+max-width:1200px;
+min-height:72px;
+margin:auto;
+padding:10px 20px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:15px
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:10px;
+color:white;
+text-decoration:none;
+font-weight:bold;
+font-size:18px
+}
+
+.brand img{
+width:48px;
+height:48px;
+object-fit:contain
+}
+
+.brand b{color:#39a9ff}
+
+nav{
+display:flex;
+gap:15px
+}
+
+nav a{
+color:#b9c9e8;
+text-decoration:none;
+font-size:14px
+}
+
+nav a:hover{color:#39a9ff}
+
+.user-area{
+display:flex;
+gap:8px;
+align-items:center
+}
+
+.btn{
+border:0;
+border-radius:11px;
+padding:10px 17px;
+background:#1688e8;
+color:white;
+font-weight:bold;
+transition:.2s
+}
+
+.btn:hover{
+background:#2b9cff;
+transform:translateY(-2px)
+}
+
+.btn.secondary{background:#172b4c}
+.btn.green{background:#159447}
+.btn.red{background:#b52b45}
+
+.hidden{display:none!important}
+
+.hero{
+min-height:600px;
+padding:70px 20px;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+background:
+radial-gradient(circle at 50% 0%,#16477e 0%,transparent 45%),
+#050b18
+}
+
+.hero-content{
+width:100%;
+max-width:900px
+}
+
+.hero-logos{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:25px;
+flex-wrap:wrap;
+margin-bottom:25px
+}
+
+.hero-logos img{
+width:140px;
+height:140px;
+object-fit:contain;
+filter:drop-shadow(0 0 20px rgba(50,160,255,.3))
+}
+
+.hero h1{
+font-size:clamp(30px,6vw,58px);
+line-height:1.4;
+margin-bottom:15px
+}
+
+.hero h1 span{color:#39a9ff}
+
+.hero p{
+color:#b9c9e8;
+font-size:17px;
+margin-bottom:25px
+}
+
+.section{
+max-width:1200px;
+margin:auto;
+padding:70px 20px
+}
+
+.section-title{
+text-align:center;
+margin-bottom:35px
+}
+
+.section-title h2{
+font-size:30px;
+margin-bottom:8px
+}
+
+.section-title p{color:#9eafd0}
+
+.servers{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px
+}
+
+.server{
+background:linear-gradient(145deg,#0c1930,#091224);
+border:1px solid #1a3761;
+border-radius:18px;
+padding:25px;
+text-align:center;
+transition:.2s
+}
+
+.server:hover{
+transform:translateY(-5px);
+border-color:#287fc5
+}
+
+.server h3{margin-bottom:8px}
+
+.server p{
+color:#9eafd0;
+font-size:14px;
+margin-bottom:15px
+}
+
+.ip{
+direction:ltr;
+font-family:monospace;
+background:#030813;
+border:1px solid #203c68;
+color:#48b0ff;
+border-radius:10px;
+padding:10px;
+margin-bottom:12px;
+overflow-wrap:anywhere
+}
+
+.status{
+color:#82d49b;
+font-size:13px;
+margin-bottom:15px
+}
+
+.dot{
+display:inline-block;
+width:9px;
+height:9px;
+background:#35d66d;
+border-radius:50%;
+margin-left:5px
+}
+
+.store{
+max-width:800px;
+margin:auto;
+background:linear-gradient(145deg,#0c1930,#091224);
+border:1px solid #1a3761;
+border-radius:20px;
+padding:35px;
+text-align:center
+}
+
+.store-icon{font-size:55px}
+
+.store img{
+width:110px;
+height:110px;
+object-fit:contain
+}
+
+.store h2{margin:10px 0}
+
+.store p{
+color:#9eafd0;
+margin-bottom:22px
+}
+
+.logos{
+display:flex;
+justify-content:center;
+align-items:stretch;
+flex-wrap:wrap;
+gap:25px
+}
+
+.logo-card{
+width:280px;
+background:#0b162a;
+border:1px solid #1b3760;
+border-radius:18px;
+padding:25px;
+text-align:center
+}
+
+.logo-card img{
+width:150px;
+height:150px;
+object-fit:contain
+}
+
+.logo-card p{color:#9eafd0}
+
+.account{
+max-width:850px;
+margin:auto;
+background:#0b162a;
+border:1px solid #1b3760;
+border-radius:18px;
+padding:25px
+}
+
+.account-email{
+direction:ltr;
+text-align:center;
+color:#48b0ff;
+margin:10px 0 20px
+}
+
+.ticket-form{
+display:grid;
+gap:12px;
+margin-top:20px
+}
+
+input,textarea,select{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:1px solid #203c68;
+background:#050b18;
+color:white;
+outline:none
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+border-color:#39a9ff
+}
+
+textarea{
+min-height:120px;
+resize:vertical
+}
+
+.message{
+text-align:center;
+margin-top:12px;
+color:#ffbd65;
+font-size:14px
+}
+
+.success{color:#62df8d}
+
+.ticket{
+background:#071124;
+border:1px solid #1b3760;
+border-radius:12px;
+padding:15px;
+margin-top:12px
+}
+
+.ticket-title{
+font-weight:bold;
+margin-bottom:5px
+}
+
+.ticket small{color:#8498ba}
+
+.reply{
+margin-top:10px;
+padding:10px;
+border-right:3px solid #39a9ff;
+background:#0c1930
+}
+
+.badge{
+display:inline-block;
+padding:3px 9px;
+border-radius:20px;
+font-size:11px;
+margin-top:7px
+}
+
+.badge.pending{
+background:#6b4b17;
+color:#ffd76d
+}
+
+.badge.answered{
+background:#13572d;
+color:#7cf0a0
+}
+
+/* EMAIL VERIFICATION */
+
+.verification{
+max-width:850px;
+margin:0 auto 30px;
+background:linear-gradient(145deg,#0c1930,#091224);
+border:1px solid #287fc5;
+border-radius:18px;
+padding:28px;
+text-align:center;
+display:none
+}
+
+.verification-icon{
+font-size:55px;
+margin-bottom:10px
+}
+
+.verification h3{
+margin-bottom:8px
+}
+
+.verification p{
+color:#9eafd0;
+margin-bottom:10px
+}
+
+.verification-email{
+direction:ltr;
+display:inline-block;
+color:#48b0ff;
+font-weight:bold;
+margin:5px 0 15px
+}
+
+.verification-buttons{
+display:flex;
+justify-content:center;
+gap:10px;
+flex-wrap:wrap;
+margin-top:15px
+}
+
+.verified{
+color:#62df8d!important
+}
+
+.admin-box{
+display:none;
+max-width:1100px;
+margin:auto;
+background:#0b162a;
+border:1px solid #6b2945;
+border-radius:18px;
+padding:25px
+}
+
+.admin-ticket{
+background:#071124;
+border:1px solid #283c60;
+border-radius:12px;
+padding:15px;
+margin-top:15px
+}
+
+.admin-ticket textarea{
+margin-top:10px;
+min-height:90px
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.8);
+z-index:5000;
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px
+}
+
+.modal.show{display:flex}
+
+.modal-box{
+width:100%;
+max-width:430px;
+background:#0b162a;
+border:1px solid #244b7e;
+border-radius:20px;
+padding:25px;
+position:relative
+}
+
+.close{
+position:absolute;
+left:15px;
+top:10px;
+background:none;
+border:0;
+color:#aaa;
+font-size:25px
+}
+
+.auth-logo{
+text-align:center;
+margin-bottom:15px
+}
+
+.auth-logo img{
+width:90px;
+height:90px;
+object-fit:contain
+}
+
+.auth-logo h2{margin-top:5px}
+
+.tabs{
+display:flex;
+gap:8px;
+margin:20px 0
+}
+
+.tabs button{
+flex:1;
+padding:10px;
+border:0;
+border-radius:9px;
+background:#142643;
+color:white
+}
+
+.tabs button.active{
+background:#1688e8
+}
+
+.auth-form{
+display:grid;
+gap:12px
+}
+
+.empty{
+color:#8094b6;
+text-align:center;
+padding:20px
+}
+
+hr{
+border:0;
+border-top:1px solid #1b3760;
+margin:25px 0
+}
+
+footer{
+border-top:1px solid #18345f;
+background:#030711;
+text-align:center;
+padding:30px 20px;
+color:#8fa2c4
+}
+
+footer img{
+width:60px;
+height:60px;
+object-fit:contain;
+margin:0 5px;
+vertical-align:middle
+}
+
+footer strong{color:#39a9ff}
+
+@media(max-width:800px){
+
+nav{display:none}
+
+.brand{
+font-size:13px
+}
+
+.brand img{
+width:40px;
+height:40px
+}
+
+.hero{
+min-height:550px
+}
+
+.hero-logos img{
+width:105px;
+height:105px
+}
+
+.hero h1{
+font-size:32px
+}
+
+.hero p{
+font-size:14px
+}
+
+.user-area .btn{
+padding:8px 11px;
+font-size:12px
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="nav">
+
+<a href="#home" class="brand">
+
+<img
+src="https://samopopki.github.io/pixelmc/pixelmc.png"
+alt="PixelMC">
+
+<span>
+PixelMC <b>by SAMGAMES</b>
+</span>
+
+</a>
+
+<nav>
+<a href="#home">خانه</a>
+<a href="#servers">سرورها</a>
+<a href="#daramet">🛒 دارامت</a>
+<a href="#account">🎫 تیکت</a>
+</nav>
+
+<div class="user-area">
+
+<button
+id="loginBtn"
+class="btn"
+onclick="openAuth()">
+🔐 ورود
+</button>
+
+<button
+id="logoutBtn"
+class="btn secondary hidden"
+onclick="logout()">
+🚪 خروج
+</button>
+
+</div>
+
+</div>
+
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+
+<div class="hero-content">
+
+<div class="hero-logos">
+
+<img
+src="https://samopopki.github.io/pixelmc/pixelmc.png"
+alt="PixelMC">
+
+<img
+src="https://samopopki.github.io/pixelmc/samgames.png"
+alt="SAMGAMES">
+
+</div>
+
+<h1>
+به <span>PixelMC</span> و <span>SAMGAMES</span> خوش آمدید
+</h1>
+
+<p>
+دنیای گیمینگ PixelMC و SAMGAMES
+</p>
+
+<a
+href="#servers"
+class="btn"
+style="display:inline-block;text-decoration:none">
+🎮 مشاهده سرورها
+</a>
+
+</div>
+
+</section>
+
+
+<!-- SERVERS -->
+
+<section class="section" id="servers">
+
+<div class="section-title">
+
+<h2>🎮 سرورهای Pixel</h2>
+
+<p>
+سرور موردنظر خود را انتخاب کنید.
+</p>
+
+</div>
+
+<div class="servers">
+
+<div class="server">
+
+<h3>🟦 PixelMC Survival</h3>
+
+<p>
+سرور بقا و ماجراجویی PixelMC
+</p>
+
+<div class="ip">
+pixelmc.jo3.org
+</div>
+
+<div class="status">
+<span class="dot"></span>
+آدرس سرور
+</div>
+
+<button
+class="btn"
+onclick="copyIP('pixelmc.jo3.org')">
+📋 کپی IP
+</button>
+
+</div>
+
+
+<div class="server">
+
+<h3>🟪 PixelMCRP RolePlay</h3>
+
+<p>
+تجربه نقش‌آفرینی در دنیای PixelMCRP
+</p>
+
+<div class="ip">
+PixelRp.aternos.me
+</div>
+
+<div class="status">
+<span class="dot"></span>
+آدرس سرور
+</div>
+
+<button
+class="btn"
+onclick="copyIP('PixelRp.aternos.me')">
+📋 کپی IP
+</button>
+
+</div>
+
+
+<div class="server">
+
+<h3>🟧 PixelRust</h3>
+
+<p>
+سرور Rust از مجموعه Pixel
+</p>
+
+<div class="ip">
+pixelmc.jo3.org
+</div>
+
+<div class="status">
+<span class="dot"></span>
+آدرس سرور
+</div>
+
+<button
+class="btn"
+onclick="copyIP('pixelmc.jo3.org')">
+📋 کپی IP
+</button>
+
+</div>
+
+
+<div class="server">
+
+<h3>🟩 PixelMTA</h3>
+
+<p>
+سرور MTA از مجموعه Pixel
+</p>
+
+<div class="ip">
+pixelmc.jo3.org
+</div>
+
+<div class="status">
+<span class="dot"></span>
+آدرس سرور
+</div>
+
+<button
+class="btn"
+onclick="copyIP('pixelmc.jo3.org')">
+📋 کپی IP
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- DARAMET -->
+
+<section class="section" id="daramet">
+
+<div class="section-title">
+
+<h2>🛒 فروشگاه PixelMC</h2>
+
+<p>
+خرید رنک و امکانات PixelMC
+</p>
+
+</div>
+
+<div class="store">
+
+<div class="store-icon">
+🛒
+</div>
+
+<img
+src="https://samopopki.github.io/pixelmc/pixelmc.png"
+alt="PixelMC">
+
+<h2>
+فروشگاه PixelMC در دارامت
+</h2>
+
+<p>
+برای خرید رنک و امکانات وارد فروشگاه شوید.
+</p>
+
+<a
+href="https://daramet.com/pixelsmp"
+target="_blank"
+rel="noopener noreferrer"
+class="btn"
+style="display:inline-block;text-decoration:none">
+
+🛍️ ورود به دارامت
+
+</a>
+
+</div>
+
+</section>
+
+
+<!-- LOGOS -->
+
+<section class="section">
+
+<div class="section-title">
+
+<h2>⭐ PixelMC × SAMGAMES</h2>
+
+<p>
+برند رسمی مجموعه
+</p>
+
+</div>
+
+<div class="logos">
+
+<div class="logo-card">
+
+<img
+src="https://samopopki.github.io/pixelmc/pixelmc.png"
+alt="PixelMC">
+
+<h3>PixelMC</h3>
+
+<p>
+Minecraft • Survival • RP
+</p>
+
+</div>
+
+
+<div class="logo-card">
+
+<img
+src="https://samopopki.github.io/pixelmc/samgames.png"
+alt="SAMGAMES">
+
+<h3>SAMGAMES</h3>
+
+<p>
+Powered by SAMGAMES
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ACCOUNT -->
+
+<section class="section" id="account">
+
+<div class="section-title">
+
+<h2>🎫 حساب و پشتیبانی</h2>
+
+<p>
+ورود کنید تا بتوانید تیکت ارسال کنید.
+</p>
+
+</div>
+
+
+<div
+id="loggedOutBox"
+class="account"
+style="text-align:center">
+
+<h3>
+🔐 ورود به PixelMC
+</h3>
+
+<p style="color:#9eafd0;margin:12px 0 20px">
+
+برای ارسال تیکت و مشاهده پاسخ‌ها
+ابتدا وارد حساب خود شوید.
+
+</p>
+
+<button
+class="btn"
+onclick="openAuth()">
+
+🔐 ورود / ثبت‌نام
+
+</button>
+
+</div>
+
+
+<!-- EMAIL VERIFICATION -->
+
+<div
+id="verificationBox"
+class="verification">
+
+<div
+id="verificationIcon"
+class="verification-icon">
+📩
+</div>
+
+<h3 id="verificationTitle">
+تأیید ایمیل
+</h3>
+
+<p id="verificationText">
+لطفاً ایمیل خود را بررسی کنید و روی
+<strong>Confirm email address</strong>
+بزنید.
+</p>
+
+<div
+id="verificationEmail"
+class="verification-email">
+</div>
+
+<div
+class="verification-buttons">
+
+<button
+id="resendBtn"
+class="btn"
+onclick="resendVerificationEmail()">
+
+📩 ارسال دوباره ایمیل
+
+</button>
+
+<button
+class="btn secondary"
+onclick="checkEmailVerification()">
+
+🔄 بررسی تأیید
+
+</button>
+
+</div>
+
+</div>
+
+
+<div
+id="accountBox"
+class="account hidden">
+
+<h3 style="text-align:center">
+👤 حساب کاربری
+</h3>
+
+<div
+id="userEmail"
+class="account-email">
+</div>
+
+<div style="text-align:center">
+
+<button
+class="btn secondary"
+onclick="logout()">
+
+🚪 خروج
+
+</button>
+
+</div>
+
+
+<hr>
+
+
+<h3>
+🎫 ارسال تیکت
+</h3>
+
+<div class="ticket-form">
+
+<select id="ticketCategory">
+
+<option value="support">
+پشتیبانی
+</option>
+
+<option value="server">
+مشکل سرور
+</option>
+
+<option value="shop">
+دارامت / فروشگاه
+</option>
+
+<option value="account">
+حساب کاربری
+</option>
+
+<option value="other">
+سایر
+</option>
+
+</select>
+
+
+<input
+id="ticketSubject"
+type="text"
+placeholder="موضوع تیکت">
+
+
+<textarea
+id="ticketMessage"
+placeholder="پیام خود را بنویسید...">
+</textarea>
+
+
+<button
+class="btn"
+onclick="submitTicket()">
+
+📨 ارسال تیکت
+
+</button>
+
+</div>
+
+<div
+id="ticketMessageBox"
+class="message">
+</div>
+
+
+<hr>
+
+
+<h3>
+📋 تیکت‌های من
+</h3>
+
+<div id="myTickets">
+<div class="empty">
+هنوز وارد نشده‌اید.
+</div>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ADMIN -->
+
+<section class="section">
+
+<div
+id="adminBox"
+class="admin-box">
+
+<div class="section-title">
+
+<h2>
+👑 پنل مدیریت PixelMC
+</h2>
+
+<p>
+مدیریت تیکت‌های کاربران
+</p>
+
+</div>
+
+<div
+id="adminTickets">
+
+<div class="empty">
+در حال بارگذاری...
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- LOGIN MODAL -->
+
+<div
+id="authModal"
+class="modal">
+
+<div class="modal-box">
+
+<button
+class="close"
+onclick="closeAuth()">
+×
+</button>
+
+
+<div class="auth-logo">
+
+<img
+src="https://samopopki.github.io/pixelmc/pixelmc.png"
+alt="PixelMC">
+
+<h2>
+PixelMC
+</h2>
+
+<div style="color:#39a9ff">
+by SAMGAMES
+</div>
+
+</div>
+
+
+<div class="tabs">
+
+<button
+id="loginTab"
+class="active"
+onclick="switchAuth('login')">
+
+ورود
+
+</button>
+
+<button
+id="signupTab"
+onclick="switchAuth('signup')">
+
+ثبت‌نام
+
+</button>
+
+</div>
+
+
+<!-- LOGIN -->
+
+<div
+id="loginForm"
+class="auth-form">
+
+<input
+id="loginEmail"
+type="email"
+placeholder="ایمیل">
+
+
+<input
+id="loginPassword"
+type="password"
+placeholder="رمز عبور">
+
+
+<button
+class="btn"
+onclick="login()">
+
+🔐 ورود به حساب
+
+</button>
+
+</div>
+
+
+<!-- SIGNUP -->
+
+<div
+id="signupForm"
+class="auth-form hidden">
+
+<input
+id="signupEmail"
+type="email"
+placeholder="ایمیل">
+
+
+<input
+id="signupPassword"
+type="password"
+placeholder="رمز عبور">
+
+
+<input
+id="signupPassword2"
+type="password"
+placeholder="تکرار رمز عبور">
+
+
+<button
+class="btn green"
+onclick="signup()">
+
+✨ ساخت حساب
+
+</button>
+
+</div>
+
+
+<div
+id="authMessage"
+class="message">
+</div>
+
+</div>
+
+</div>
+
+
+<footer>
+
+<div>
+
+<img
+src="https://samopopki.github.io/pixelmc/pixelmc.png"
+alt="PixelMC">
+
+<img
+src="https://samopopki.github.io/pixelmc/samgames.png"
+alt="SAMGAMES">
+
+</div>
+
+<p>
+© 2026
+<strong>PixelMC</strong>
+by
+<strong>SAMGAMES</strong>
+</p>
+
+<p>
+تمامی حقوق محفوظ است.
+</p>
+
+</footer>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE CONFIG
+===================================================== */
+
+const SUPABASE_URL =
+"https://erhdlbppnaavbteiayqk.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_wHmMpZDtyQudihvdGbpzzQ_9f5xGu-V";
+
+const db =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+
+/* =====================================================
+   ADMIN
+===================================================== */
+
+const ADMIN_EMAIL =
+"admin@gmail.com";
+
+let currentUser = null;
+let currentProfile = null;
+
+
+/* =====================================================
+   PAGE START
+===================================================== */
+
+document.addEventListener(
+"DOMContentLoaded",
+async function(){
+
+const sessionResult =
+await db.auth.getSession();
+
+currentUser =
+sessionResult.data.session?.user || null;
+
+await refreshUI();
+
+
+db.auth.onAuthStateChange(
+async function(event,session){
+
+currentUser =
+session?.user || null;
+
+await refreshUI();
+
+});
+
+});
+
+
+/* =====================================================
+   AUTH MODAL
+===================================================== */
+
+function openAuth(){
+
+document
+.getElementById("authModal")
+.classList.add("show");
+
+}
+
+function closeAuth(){
+
+document
+.getElementById("authModal")
+.classList.remove("show");
+
+document
+.getElementById("authMessage")
+.textContent="";
+
+}
+
+function switchAuth(mode){
+
+const loginForm =
+document.getElementById("loginForm");
+
+const signupForm =
+document.getElementById("signupForm");
+
+const loginTab =
+document.getElementById("loginTab");
+
+const signupTab =
+document.getElementById("signupTab");
+
+
+if(mode==="login"){
+
+loginForm.classList.remove("hidden");
+signupForm.classList.add("hidden");
+
+loginTab.classList.add("active");
+signupTab.classList.remove("active");
+
+}else{
+
+loginForm.classList.add("hidden");
+signupForm.classList.remove("hidden");
+
+loginTab.classList.remove("active");
+signupTab.classList.add("active");
+
+}
+
+document
+.getElementById("authMessage")
+.textContent="";
+
+}
+
+
+/* =====================================================
+   SIGN UP
+===================================================== */
+
+async function signup(){
+
+const email =
+document
+.getElementById("signupEmail")
+.value
+.trim()
+.toLowerCase();
+
+const password =
+document
+.getElementById("signupPassword")
+.value;
+
+const password2 =
+document
+.getElementById("signupPassword2")
+.value;
+
+const msg =
+document.getElementById("authMessage");
+
+
+if(!email || !password){
+
+msg.textContent =
+"ایمیل و رمز عبور را وارد کنید.";
+
+return;
+
+}
+
+
+if(password.length < 6){
+
+msg.textContent =
+"رمز عبور باید حداقل ۶ کاراکتر باشد.";
+
+return;
+
+}
+
+
+if(password !== password2){
+
+msg.textContent =
+"تکرار رمز عبور صحیح نیست.";
+
+return;
+
+}
+
+
+msg.className =
+"message";
+
+msg.textContent =
+"در حال ساخت حساب...";
+
+
+try{
+
+const {data,error} =
+await db.auth.signUp({
+
+email:email,
+
+password:password,
+
+options:{
+emailRedirectTo:
+"https://samopopki.github.io/pixelmc/"
+}
+
+});
+
+
+if(error){
+
+throw error;
+
+}
+
+
+/*
+  اگر Supabase تأیید ایمیل را روشن داشته باشد،
+  معمولاً session در این مرحله null است.
+*/
+
+if(data.session){
+
+currentUser =
+data.user;
+
+msg.className =
+"message success";
+
+msg.textContent =
+"ثبت‌نام موفق بود. ✅";
+
+closeAuth();
+
+await refreshUI();
+
+}else{
+
+msg.className =
+"message success";
+
+msg.textContent =
+"حساب ساخته شد! 📧 ایمیل خود را باز کنید و روی Confirm email address بزنید.";
+
+closeAuth();
+
+showVerificationAfterSignup(email);
+
+}
+
+}catch(error){
+
+msg.className =
+"message";
+
+msg.textContent =
+translateError(error.message);
+
+}
+
+}
+
+
+/* =====================================================
+   SHOW VERIFICATION
+===================================================== */
+
+function showVerificationAfterSignup(email){
+
+const box =
+document.getElementById("verificationBox");
+
+const emailBox =
+document.getElementById("verificationEmail");
+
+const title =
+document.getElementById("verificationTitle");
+
+const text =
+document.getElementById("verificationText");
+
+const icon =
+document.getElementById("verificationIcon");
+
+
+box.style.display =
+"block";
+
+emailBox.textContent =
+email;
+
+title.textContent =
+"📧 ایمیل خود را تأیید کنید";
+
+text.innerHTML =
+"ایمیل تأیید برای شما ارسال شد.<br>" +
+"وارد ایمیل شوید و روی " +
+"<strong>Confirm email address</strong> " +
+"بزنید.";
+
+icon.textContent =
+"📩";
+
+box.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+
+}
+
+
+/* =====================================================
+   RESEND VERIFICATION
+===================================================== */
+
+async function resendVerificationEmail(){
+
+const email =
+currentUser?.email ||
+document.getElementById("verificationEmail").textContent.trim();
+
+
+if(!email){
+
+showToast(
+"ایمیل برای ارسال مجدد پیدا نشد."
+);
+
+return;
+
+}
+
+
+const button =
+document.getElementById("resendBtn");
+
+button.disabled=true;
+
+button.textContent =
+"⏳ در حال ارسال...";
+
+
+try{
+
+const {error} =
+await db.auth.resend({
+
+type:"signup",
+
+email:email,
+
+options:{
+emailRedirectTo:
+"https://samopopki.github.io/pixelmc/"
+}
+
+});
+
+
+if(error){
+
+throw error;
+
+}
+
+showToast(
+"ایمیل تأیید دوباره ارسال شد. 📩"
+);
+
+}catch(error){
+
+showToast(
+"خطا: "+
+translateError(error.message)
+);
+
+}finally{
+
+button.disabled=false;
+
+button.textContent =
+"📩 ارسال دوباره ایمیل";
+
+}
+
+}
+
+
+/* =====================================================
+   CHECK EMAIL VERIFICATION
+===================================================== */
+
+async function checkEmailVerification(){
+
+try{
+
+const {data,error} =
+await db.auth.getUser();
+
+
+if(error){
+
+throw error;
+
+}
+
+
+if(!data.user){
+
+showToast(
+"ابتدا وارد حساب شوید."
+);
+
+return;
+
+}
+
+
+currentUser =
+data.user;
+
+
+if(currentUser.email_confirmed_at){
+
+showVerifiedBox();
+
+await refreshUI();
+
+showToast(
+"ایمیل شما با موفقیت تأیید شده است! ✅"
+);
+
+}else{
+
+showToast(
+"هنوز ایمیل تأیید نشده است. 📩"
+);
+
+}
+
+}catch(error){
+
+showToast(
+"خطا در بررسی ایمیل: "+
+translateError(error.message)
+);
+
+}
+
+}
+
+
+/* =====================================================
+   VERIFIED BOX
+===================================================== */
+
+function showVerifiedBox(){
+
+const box =
+document.getElementById("verificationBox");
+
+const title =
+document.getElementById("verificationTitle");
+
+const text =
+document.getElementById("verificationText");
+
+const icon =
+document.getElementById("verificationIcon");
+
+const buttons =
+box.querySelector(".verification-buttons");
+
+
+box.style.display =
+"block";
+
+icon.textContent =
+"✅";
+
+title.textContent =
+"ایمیل شما تأیید شد!";
+
+title.classList.add("verified");
+
+text.innerHTML =
+"ایمیل حساب شما با موفقیت تأیید شده است. 🎉";
+
+buttons.style.display =
+"none";
+
+}
+
+
+/* =====================================================
+   REFRESH VERIFICATION STATUS
+===================================================== */
+
+function updateVerificationUI(){
+
+const box =
+document.getElementById("verificationBox");
+
+if(!currentUser){
+
+box.style.display =
+"none";
+
+return;
+
+}
+
+
+if(currentUser.email_confirmed_at){
+
+showVerifiedBox();
+
+}else{
+
+box.style.display =
+"block";
+
+document
+.getElementById("verificationEmail")
+.textContent =
+currentUser.email || "";
+
+}
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+async function login(){
+
+const email =
+document
+.getElementById("loginEmail")
+.value
+.trim()
+.toLowerCase();
+
+const password =
+document
+.getElementById("loginPassword")
+.value;
+
+const msg =
+document.getElementById("authMessage");
+
+
+if(!email || !password){
+
+msg.textContent =
+"ایمیل و رمز عبور را وارد کنید.";
+
+return;
+
+}
+
+
+msg.className =
+"message";
+
+msg.textContent =
+"در حال ورود...";
+
+
+try{
+
+const {data,error} =
+await db.auth.signInWithPassword({
+
+email:email,
+password:password
+
+});
+
+
+if(error){
+
+throw error;
+
+}
+
+
+currentUser =
+data.user;
+
+msg.className =
+"message success";
+
+msg.textContent =
+"ورود موفق بود. ✅";
+
+closeAuth();
+
+await refreshUI();
+
+}catch(error){
+
+msg.className =
+"message";
+
+msg.textContent =
+translateError(error.message);
+
+}
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+async function logout(){
+
+await db.auth.signOut();
+
+currentUser=null;
+currentProfile=null;
+
+document.getElementById("verificationBox")
+.style.display="none";
+
+await refreshUI();
+
+}
+
+
+/* =====================================================
+   PROFILE
+===================================================== */
+
+async function loadProfile(){
+
+currentProfile=null;
+
+if(!currentUser){
+return;
+}
+
+
+const {data,error} =
+await db
+.from("profiles")
+.select("*")
+.eq("id",currentUser.id)
+.maybeSingle();
+
+
+if(!error){
+
+currentProfile=data;
+
+}
+
+}
+
+
+/* =====================================================
+   REFRESH UI
+===================================================== */
+
+async function refreshUI(){
+
+await loadProfile();
+
+
+const loginBtn =
+document.getElementById("loginBtn");
+
+const logoutBtn =
+document.getElementById("logoutBtn");
+
+const loggedOutBox =
+document.getElementById("loggedOutBox");
+
+const accountBox =
+document.getElementById("accountBox");
+
+const adminBox =
+document.getElementById("adminBox");
+
+
+if(currentUser){
+
+loginBtn.classList.add("hidden");
+
+logoutBtn.classList.remove("hidden");
+
+loggedOutBox.classList.add("hidden");
+
+accountBox.classList.remove("hidden");
+
+
+document
+.getElementById("userEmail")
+.textContent =
+currentUser.email || "";
+
+
+/* وضعیت تأیید ایمیل */
+
+updateVerificationUI();
+
+
+/*
+  فقط بعد از تأیید ایمیل،
+  تیکت‌ها را نمایش می‌دهیم.
+*/
+
+if(currentUser.email_confirmed_at){
+
+await loadMyTickets();
+
+}else{
+
+document.getElementById("myTickets")
+.innerHTML =
+'<div class="empty">ابتدا ایمیل خود را تأیید کنید.</div>';
+
+}
+
+
+/*
+  ADMIN CHECK
+*/
+
+const isAdmin =
+currentUser.email?.toLowerCase()
+===
+ADMIN_EMAIL ||
+currentProfile?.role==="admin";
+
+
+if(
+isAdmin &&
+currentUser.email_confirmed_at
+){
+
+adminBox.style.display="block";
+
+await loadAdminTickets();
+
+}else{
+
+adminBox.style.display="none";
+
+}
+
+}else{
+
+loginBtn.classList.remove("hidden");
+
+logoutBtn.classList.add("hidden");
+
+loggedOutBox.classList.remove("hidden");
+
+accountBox.classList.add("hidden");
+
+adminBox.style.display="none";
+
+}
+
+}
+
+
+/* =====================================================
+   SUBMIT TICKET
+===================================================== */
+
+async function submitTicket(){
+
+if(!currentUser){
+
+openAuth();
+
+return;
+
+}
+
+
+if(!currentUser.email_confirmed_at){
+
+showVerificationAfterSignup(
+currentUser.email
+);
+
+alert(
+"ابتدا ایمیل خود را تأیید کنید."
+);
+
+return;
+
+}
+
+
+const category =
+document
+.getElementById("ticketCategory")
+.value;
+
+const subject =
+document
+.getElementById("ticketSubject")
+.value
+.trim();
+
+const message =
+document
+.getElementById("ticketMessage")
+.value
+.trim();
+
+const box =
+document.getElementById("ticketMessageBox");
+
+
+if(!subject || !message){
+
+box.textContent =
+"موضوع و متن تیکت را وارد کنید.";
+
+return;
+
+}
+
+
+box.className =
+"message";
+
+box.textContent =
+"در حال ارسال...";
+
+
+try{
+
+const {error} =
+await db
+.from("tickets")
+.insert({
+
+user_id:currentUser.id,
+
+email:currentUser.email,
+
+category:category,
+
+subject:subject,
+
+message:message,
+
+status:"pending",
+
+reply:""
+
+});
+
+
+if(error){
+
+throw error;
+
+}
+
+
+document
+.getElementById("ticketSubject")
+.value="";
+
+document
+.getElementById("ticketMessage")
+.value="";
+
+
+box.className =
+"message success";
+
+box.textContent =
+"تیکت با موفقیت ارسال شد. ✅";
+
+
+await loadMyTickets();
+
+}catch(error){
+
+box.className =
+"message";
+
+box.textContent =
+"خطا: "+
+translateError(error.message);
+
+}
+
+}
+
+
+/* =====================================================
+   USER TICKETS
+===================================================== */
+
+async function loadMyTickets(){
+
+if(!currentUser)return;
+
+
+const container =
+document.getElementById("myTickets");
+
+
+container.innerHTML =
+'<div class="empty">در حال بارگذاری...</div>';
+
+
+const {data,error} =
+await db
+.from("tickets")
+.select("*")
+.eq("user_id",currentUser.id)
+.order("created_at",{ascending:false});
+
+
+if(error){
+
+container.innerHTML =
+'<div class="empty">خطا در دریافت تیکت‌ها.</div>';
+
+return;
+
+}
+
+
+if(!data || data.length===0){
+
+container.innerHTML =
+'<div class="empty">هنوز تیکتی ندارید.</div>';
+
+return;
+
+}
+
+
+container.innerHTML =
+data.map(ticket=>{
+
+const answered =
+ticket.status==="answered";
+
+return `
+
+<div class="ticket">
+
+<div class="ticket-title">
+
+🎫 ${escapeHtml(ticket.subject)}
+
+</div>
+
+<small>
+
+${formatDate(ticket.created_at)}
+
+</small>
+
+<br>
+
+<span class="badge ${
+answered ? "answered" : "pending"
+}">
+
+${
+answered
+? "پاسخ داده شده"
+: "در انتظار پاسخ"
+}
+
+</span>
+
+<p style="margin-top:10px">
+
+${escapeHtml(ticket.message)}
+
+</p>
+
+${
+ticket.reply
+?
+`
+<div class="reply">
+
+<strong>
+👑 پاسخ ادمین:
+</strong>
+
+<br>
+
+${escapeHtml(ticket.reply)}
+
+</div>
+`
+:""
+}
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+/* =====================================================
+   ADMIN TICKETS
+===================================================== */
+
+async function loadAdminTickets(){
+
+if(!currentUser)return;
+
+
+const isAdmin =
+currentUser.email?.toLowerCase()
+===
+ADMIN_EMAIL ||
+currentProfile?.role==="admin";
+
+
+if(!isAdmin)return;
+
+
+const container =
+document.getElementById("adminTickets");
+
+
+container.innerHTML =
+'<div class="empty">در حال بارگذاری...</div>';
+
+
+const {data,error} =
+await db
+.from("tickets")
+.select("*")
+.order("created_at",{ascending:false});
+
+
+if(error){
+
+container.innerHTML =
+'<div class="empty">خطا در دریافت تیکت‌ها.</div>';
+
+return;
+
+}
+
+
+if(!data || data.length===0){
+
+container.innerHTML =
+'<div class="empty">تیکتی وجود ندارد.</div>';
+
+return;
+
+}
+
+
+container.innerHTML =
+data.map(ticket=>`
+
+<div class="admin-ticket">
+
+<strong>
+🎫 ${escapeHtml(ticket.subject)}
+</strong>
+
+<br>
+
+<small>
+کاربر:
+${escapeHtml(ticket.email || "نامشخص")}
+</small>
+
+<br>
+
+<small>
+دسته:
+${escapeHtml(ticket.category)}
+</small>
+
+<br>
+
+<small>
+${formatDate(ticket.created_at)}
+</small>
+
+<hr>
+
+<p>
+${escapeHtml(ticket.message)}
+</p>
+
+<textarea
+id="reply-${ticket.id}"
+placeholder="پاسخ ادمین...">${escapeHtml(ticket.reply || "")}</textarea>
+
+<div
+style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+
+<button
+class="btn green"
+onclick="replyTicket('${ticket.id}')">
+
+💬 ارسال پاسخ
+
+</button>
+
+<button
+class="btn red"
+onclick="deleteTicket('${ticket.id}')">
+
+🗑️ حذف
+
+</button>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =====================================================
+   ADMIN REPLY
+===================================================== */
+
+async function replyTicket(id){
+
+if(!currentUser)return;
+
+
+const isAdmin =
+currentUser.email?.toLowerCase()
+===
+ADMIN_EMAIL ||
+currentProfile?.role==="admin";
+
+
+if(!isAdmin){
+
+alert("دسترسی ندارید.");
+
+return;
+
+}
+
+
+const textarea =
+document.getElementById("reply-"+id);
+
+const reply =
+textarea.value.trim();
+
+
+const {error} =
+await db
+.from("tickets")
+.update({
+
+reply:reply,
+
+status:
+reply
+? "answered"
+: "pending"
+
+})
+.eq("id",id);
+
+
+if(error){
+
+alert(
+"خطا: "+
+translateError(error.message)
+);
+
+return;
+
+}
+
+
+alert("پاسخ ذخیره شد. ✅");
+
+await loadAdminTickets();
+
+}
+
+
+/* =====================================================
+   ADMIN DELETE
+===================================================== */
+
+async function deleteTicket(id){
+
+if(!currentUser)return;
+
+
+const isAdmin =
+currentUser.email?.toLowerCase()
+===
+ADMIN_EMAIL ||
+currentProfile?.role==="admin";
+
+
+if(!isAdmin){
+
+alert("دسترسی ندارید.");
+
+return;
+
+}
+
+
+if(!confirm(
+"آیا از حذف این تیکت مطمئن هستید؟"
+)){
+
+return;
+
+}
+
+
+const {error} =
+await db
+.from("tickets")
+.delete()
+.eq("id",id);
+
+
+if(error){
+
+alert(
+"خطا: "+
+translateError(error.message)
+);
+
+return;
+
+}
+
+
+await loadAdminTickets();
+
+}
+
+
+/* =====================================================
+   COPY IP
+===================================================== */
+
+async function copyIP(ip){
+
+try{
+
+await navigator.clipboard.writeText(ip);
+
+alert(
+"IP کپی شد:\n"+ip
+);
+
+}catch{
+
+prompt(
+"IP را کپی کنید:",
+ip
+);
+
+}
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function showToast(message){
+
+let toast =
+document.getElementById("pixelToast");
+
+if(!toast){
+
+toast =
+document.createElement("div");
+
+toast.id =
+"pixelToast";
+
+toast.style.position="fixed";
+toast.style.bottom="20px";
+toast.style.left="20px";
+toast.style.zIndex="99999";
+toast.style.background="#0b162a";
+toast.style.border="1px solid #287fc5";
+toast.style.color="white";
+toast.style.padding="13px 18px";
+toast.style.borderRadius="12px";
+toast.style.boxShadow="0 10px 30px rgba(0,0,0,.4)";
+toast.style.maxWidth="340px";
+
+document.body.appendChild(toast);
+
+}
+
+toast.textContent =
+message;
+
+setTimeout(
+()=>{
+toast.remove();
+},
+3500
+);
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+if(value===null ||
+value===undefined){
+
+return "";
+
+}
+
+return String(value)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+function formatDate(date){
+
+try{
+
+return new Date(date)
+.toLocaleString("fa-IR");
+
+}catch{
+
+return date || "";
+
+}
+
+}
+
+
+/* =====================================================
+   ERROR TRANSLATION
+===================================================== */
+
+function translateError(message){
+
+const m =
+String(message || "")
+.toLowerCase();
+
+
+if(
+m.includes("invalid login credentials")
+){
+
+return "ایمیل یا رمز عبور اشتباه است.";
+
+}
+
+
+if(
+m.includes("email not confirmed")
+){
+
+return "ایمیل هنوز تأیید نشده است.";
+
+}
+
+
+if(
+m.includes("user already registered")
+){
+
+return "این ایمیل قبلاً ثبت‌نام شده است.";
+
+}
+
+
+if(
+m.includes("password")
+&&
+m.includes("6")
+){
+
+return "رمز عبور باید حداقل ۶ کاراکتر باشد.";
+
+}
+
+
+if(
+m.includes("rate limit")
+){
+
+return "تعداد ارسال ایمیل زیاد شده؛ کمی صبر کنید و دوباره امتحان کنید.";
+
+}
+
+
+if(
+m.includes("redirect")
+){
+
+return "آدرس برگشت ایمیل در Supabase تنظیم نشده است.";
+
+}
+
+
+if(
+m.includes("row-level security")
+){
+
+return "دسترسی دیتابیس توسط RLS مسدود شده است.";
+
+}
+
+
+return message;
+
+}
+
+
+/* =====================================================
+   MODAL OUTSIDE CLICK
+===================================================== */
+
+document
+.getElementById("authModal")
+.addEventListener(
+"click",
+function(e){
+
+if(e.target===this){
+
+closeAuth();
+
+}
+
+});
+
+</script>
+
+</body>
+  </html>
