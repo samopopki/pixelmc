@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>تأیید ایمیل | PixelMC</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Tahoma,Arial,sans-serif;
+  background:
+    radial-gradient(circle at top,#17365f 0,#07111f 45%,#040914 100%);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.container{
+  width:100%;
+  max-width:560px;
+}
+
+.card{
+  background:rgba(15,27,48,.96);
+  border:1px solid #28466d;
+  border-radius:24px;
+  padding:32px 24px;
+  text-align:center;
+  box-shadow:0 20px 70px rgba(0,0,0,.5);
+}
+
+.logo{
+  width:100px;
+  height:100px;
+  object-fit:contain;
+  margin-bottom:8px;
+}
+
+h1{
+  margin:8px 0;
+  font-size:28px;
+}
+
+.subtitle{
+  color:#aebed7;
+  line-height:2;
+  margin-bottom:22px;
+}
+
+.email{
+  direction:ltr;
+  background:#081322;
+  border:1px solid #31557f;
+  color:#55baff;
+  padding:14px;
+  border-radius:13px;
+  font-weight:bold;
+  overflow-wrap:anywhere;
+  margin:18px 0;
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:13px;
+  padding:14px;
+  margin-top:10px;
+  cursor:pointer;
+  color:white;
+  font-size:15px;
+  font-weight:bold;
+  background:#147cff;
+}
+
+button:hover{
+  opacity:.9;
+}
+
+.secondary{
+  background:#263b59;
+}
+
+.logout{
+  background:#7c2930;
+}
+
+.message{
+  margin-top:18px;
+  padding:15px;
+  border-radius:13px;
+  line-height:1.8;
+}
+
+.success{
+  color:#65f0a2;
+  background:#102d22;
+  border:1px solid #236847;
+}
+
+.error{
+  color:#ff7d7d;
+  background:#35191c;
+  border:1px solid #713238;
+}
+
+.info{
+  color:#ffd166;
+  background:#332a14;
+  border:1px solid #705d22;
+}
+
+.hidden{
+  display:none;
+}
+
+.status{
+  margin-top:20px;
+  padding:16px;
+  border-radius:14px;
+  background:#091525;
+  border:1px solid #243d5e;
+}
+
+.status strong{
+  display:block;
+  margin-bottom:8px;
+}
+
+.back{
+  display:block;
+  margin-top:20px;
+  color:#55baff;
+  text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="card">
+
+    <img
+      class="logo"
+      src="https://samopopki.github.io/pixelmc/pixelmc.png"
+      onerror="this.style.display='none'"
+    >
+
+    <h1>📧 تأیید ایمیل PixelMC</h1>
+
+    <p class="subtitle" id="description">
+      در حال اتصال به دیتابیس PixelMC...
+    </p>
+
+    <div id="emailBox" class="email hidden"></div>
+
+    <div id="statusBox" class="status hidden">
+      <strong id="statusTitle"></strong>
+      <span id="statusText"></span>
+    </div>
+
+    <button onclick="checkEmail()">
+      🔄 بررسی وضعیت ایمیل
+    </button>
+
+    <button class="secondary" onclick="resendEmail()">
+      📨 ارسال دوباره ایمیل تأیید
+    </button>
+
+    <button class="logout" onclick="logout()">
+      🚪 خروج از حساب
+    </button>
+
+    <div id="message"></div>
+
+    <a
+      class="back"
+      href="https://samopopki.github.io/pixelmc/"
+    >
+      ← برگشت به سایت PixelMC
+    </a>
+
+  </div>
+
+</div>
+
+<script>
+
+/* ==============================
+   SUPABASE
+============================== */
+
+const SUPABASE_URL =
+"https://erhdlbppnaavbteiayqk.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_wHmMpZDtyQudihvdGbpzzQ_9f5xGu-V";
+
+const db =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* آدرس برگشت بعد از تأیید ایمیل */
+
+const REDIRECT_URL =
+"https://samopopki.github.io/pixelmc/";
+
+
+let currentUser = null;
+
+
+/* ==============================
+   پیام
+============================== */
+
+function message(text,type){
+
+  const box =
+    document.getElementById("message");
+
+  box.className =
+    "message " + type;
+
+  box.textContent =
+    text;
+}
+
+
+/* ==============================
+   وضعیت
+============================== */
+
+function status(title,text){
+
+  const box =
+    document.getElementById("statusBox");
+
+  document.getElementById("statusTitle")
+    .textContent = title;
+
+  document.getElementById("statusText")
+    .textContent = text;
+
+  box.classList.remove("hidden");
+}
+
+
+/* ==============================
+   گرفتن کاربر
+============================== */
+
+async function getCurrentUser(){
+
+  const {
+    data,
+    error
+  } = await db.auth.getUser();
+
+  if(error){
+
+    console.error(error);
+
+    return null;
+  }
+
+  return data.user || null;
+}
+
+
+/* ==============================
+   نمایش کاربر
+============================== */
+
+function showUser(user){
+
+  if(!user){
+
+    document
+      .getElementById("emailBox")
+      .classList
+      .add("hidden");
+
+    return;
+  }
+
+  document
+    .getElementById("emailBox")
+    .textContent =
+    user.email || "";
+
+  document
+    .getElementById("emailBox")
+    .classList
+    .remove("hidden");
+}
+
+
+/* ==============================
+   بررسی ایمیل
+============================== */
+
+async function checkEmail(){
+
+  message(
+    "در حال بررسی وضعیت ایمیل...",
+    "info"
+  );
+
+  try{
+
+    await db.auth.refreshSession();
+
+    currentUser =
+      await getCurrentUser();
+
+    if(!currentUser){
+
+      status(
+        "❌ وارد نشده‌اید",
+        "ابتدا با حساب PixelMC وارد شوید."
+      );
+
+      message(
+        "هیچ حسابی در این مرورگر وارد نشده است.",
+        "error"
+      );
+
+      return;
+    }
+
+    showUser(currentUser);
+
+    if(currentUser.email_confirmed_at){
+
+      status(
+        "✅ ایمیل تأیید شده",
+        "این حساب می‌تواند از امکانات تأییدشده PixelMC استفاده کند."
+      );
+
+      document
+        .getElementById("description")
+        .textContent =
+        "ایمیل شما با موفقیت توسط Supabase تأیید شده است.";
+
+      message(
+        "🎉 ایمیل شما تأیید شده است!",
+        "success"
+      );
+
+    }else{
+
+      status(
+        "⏳ ایمیل تأیید نشده",
+        "لینک تأیید را از ایمیل خود باز کنید و سپس دوباره این دکمه را بزنید."
+      );
+
+      message(
+        "هنوز ایمیل تأیید نشده است.",
+        "info"
+      );
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    message(
+      "خطا در بررسی وضعیت ایمیل.",
+      "error"
+    );
+  }
+}
+
+
+/* ==============================
+   ارسال دوباره ایمیل
+============================== */
+
+async function resendEmail(){
+
+  if(!currentUser){
+
+    currentUser =
+      await getCurrentUser();
+  }
+
+  if(!currentUser){
+
+    message(
+      "ابتدا وارد حساب خود شوید.",
+      "error"
+    );
+
+    return;
+  }
+
+  if(currentUser.email_confirmed_at){
+
+    message(
+      "ایمیل این حساب قبلاً تأیید شده است.",
+      "success"
+    );
+
+    return;
+  }
+
+  message(
+    "در حال ارسال ایمیل...",
+    "info"
+  );
+
+  const {
+    error
+  } = await db.auth.resend({
+
+    type:"signup",
+
+    email:currentUser.email,
+
+    options:{
+      emailRedirectTo:
+        REDIRECT_URL
+    }
+
+  });
+
+  if(error){
+
+    console.error(error);
+
+    message(
+      "❌ ارسال ایمیل ناموفق بود: " +
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+  message(
+    "📨 ایمیل تأیید دوباره ارسال شد. پوشه Spam/Junk را هم بررسی کن.",
+    "success"
+  );
+}
+
+
+/* ==============================
+   خروج
+============================== */
+
+async function logout(){
+
+  const {
+    error
+  } = await db.auth.signOut();
+
+  if(error){
+
+    message(
+      "خطا هنگام خروج.",
+      "error"
+    );
+
+    return;
+  }
+
+  currentUser = null;
+
+  document
+    .getElementById("emailBox")
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById("statusBox")
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById("description")
+    .textContent =
+    "برای بررسی ایمیل، ابتدا وارد حساب PixelMC شوید.";
+
+  message(
+    "با موفقیت خارج شدید.",
+    "success"
+  );
+}
+
+
+/* ==============================
+   تغییر وضعیت Auth
+============================== */
+
+db.auth.onAuthStateChange(
+  (event,session)=>{
+
+    currentUser =
+      session?.user || null;
+
+    setTimeout(
+      ()=>checkEmail(),
+      0
+    );
+
+  }
+);
+
+
+/* ==============================
+   شروع صفحه
+============================== */
+
+(async function(){
+
+  const {
+    data
+  } =
+  await db.auth.getSession();
+
+  currentUser =
+    data.session?.user || null;
+
+  if(currentUser){
+
+    showUser(currentUser);
+
+    if(currentUser.email_confirmed_at){
+
+      document
+        .getElementById("description")
+        .textContent =
+        "ایمیل شما قبلاً تأیید شده است.";
+
+      status(
+        "✅ تأیید شده",
+        "حساب شما آماده استفاده است."
+      );
+
+      message(
+        "ایمیل شما تأیید شده است.",
+        "success"
+      );
+
+    }else{
+
+      document
+        .getElementById("description")
+        .textContent =
+        "لینک تأیید را از ایمیل خود باز کنید.";
+
+      status(
+        "⏳ منتظر تأیید",
+        "پس از کلیک روی لینک ایمیل، دوباره «بررسی وضعیت ایمیل» را بزنید."
+      );
+
+      message(
+        "لطفاً ایمیل خود را تأیید کنید.",
+        "info"
+      );
+
+    }
+
+  }else{
+
+    document
+      .getElementById("description")
+      .textContent =
+      "برای استفاده از این صفحه ابتدا وارد حساب PixelMC شوید.";
+
+    message(
+      "هیچ کاربری وارد نشده است.",
+      "info"
+    );
+
+  }
+
+})();
+
+</script>
+
+</body>
+</html>
