@@ -1,0 +1,36 @@
+
+body {
+    background: #101827;
+    color: white;
+    font-family: Tahoma;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 550px;
+    margin: auto;
+}
+
+header h1 {
+    color: #00e5b0;
+}
+
+.card {
+    background: #1c2940;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 15px;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    margin: 8px 0;
+    background: #6855e8;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+}
