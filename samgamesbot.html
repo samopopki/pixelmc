@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SamGamesBot</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+<header>
+<h1>🎮 SamGamesBot</h1>
+<p>ربات همه کاره روبیکا</p>
+</header>
+
+<section class="card">
+<h2>وضعیت ربات</h2>
+<p id="status">آماده اتصال</p>
+<button onclick="openActions()">مدیریت اجرا</button>
+</section>
+
+<section class="card">
+<h2>امکانات ربات</h2>
+<button onclick="show('پشتیبانی')">💬 پشتیبانی</button>
+<button onclick="show('مدیریت گروه')">🛡️ مدیریت گروه</button>
+<button onclick="show('سرگرمی')">🎮 سرگرمی</button>
+</section>
+
+<section class="card">
+<h2>راهنما</h2>
+<p>توکن را در GitHub Secrets قرار بده.</p>
+<p>نام Secret باید RUBIKA_BOT_TOKEN باشد.</p>
+</section>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
